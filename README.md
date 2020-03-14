@@ -6,7 +6,7 @@ It contains daily downloaded csv files of the dutch government data of the RIVM 
 The ```update.sh``` script downloads and parses all data and writes it to database using the ```to_sql``` method of pandas. To specify your own database backend create a file in both ```nederland``` and ```world``` folder called ```db.py``` in which you define the sqlalchemy database client to use. Example for postgresql:  
 ```
 from sqlalchemy import create_engine
-engine = create_engine('postgresql://<user>:<password>@<host>:<port>/<dbname>')
+engine = create_engine('postgresql://<user>:<password>@<host>:<port>/<dbname>', paramstyle="format")
 ```
 For other examples see sqlalchemy documentation.
 
