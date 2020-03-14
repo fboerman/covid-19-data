@@ -7,31 +7,46 @@ echo "[>] pulling RIVM data"
 #currentdate=$(echo $csvlinknl | grep -oE '[0-9]{8}')
 currentdate=$(date '+%d%m%Y')
 currentdatecsv="nederland/RIVM/${currentdate}.csv"
-rm $currentdatename 2> /dev/null
+
+if [[ ! -e $currentdatecsv ]]; then
+	touch $currentdatecsv
+fi
 #wget --quiet $csvlinknl
-./extract_current_csv_rivm.py > $currentdatecsv
+./extract_current_csv_rivm.py > /tmp/$currentdate.csv
 
-
-echo "[*>] fix names of csv"
-cd nederland/RIVM
-for file in ./*.csv; do
-    [ -e "$file" ] || continue
-    name=${file##*/}
-    newname=$(echo $name | grep -oE '[0-9]{8}')
-    newname="${newname}.csv"
-    mv $name $newname 2> /dev/null
-done
-cd ../..
+#echo "[*>] fix names of csv"
+#cd nederland/RIVM
+#for file in ./*.csv; do
+#    [ -e "$file" ] || continue
+#    name=${file##*/}
+#    newname=$(echo $name | grep -oE '[0-9]{8}')
+#    newname="${newname}.csv"
+#    mv $name $newname 2> /dev/null
+#done
+#cd ../..
 
 echo "[>] pulling johns hopkins data"
 cd world/COVID-19
-git pull
+git_output=$(git pull)
 cd ../../
 
 echo "[>] writing data to grafana database"
 echo "[*>] world"
-cd world
-./import.py
+if [[ "$git_output" != "Already up to date." ]]; then
+	cd world
+	./import.py
+	cd ..
+else
+	echo "[*>] no changes detected"
+fi
+
 echo "[*> netherlands"
-cd ../nederland
-./import.py
+diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
+if [[ "0" != "${#diff_output}" ]]; then
+	mv /tmp/$currentdate.csv $currentdatecsv
+	cd nederland
+	./import.py
+	cd ..
+else
+	echo "[*>] no changes detected"
+fi
