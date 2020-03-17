@@ -42,11 +42,18 @@ fi
 
 echo "[*> netherlands"
 diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
+HOUR=$(date +%H)
 if [[ "0" != "${#diff_output}" ]]; then
 	mv /tmp/$currentdate.csv $currentdatecsv
 	cd nederland
 	./import.py
 	cd ..
+	./push.sh
+	if [[ $HOUR != 00 ]]; then
+		cd /home/python/covid19bot/
+		env/bin/python manage.py send_updates --rivmupdate
+		cd /root/corona
+	fi
 else
 	echo "[*>] no changes detected"
 fi

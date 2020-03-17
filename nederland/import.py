@@ -29,7 +29,13 @@ for file in files:
 
 df = pd.concat(dfs).fillna(0).sort_index().astype('int')
 df = df.loc[:,df.sum(axis=0) != 0]
+df_diff = df.diff()
+
 df.reset_index(level=0, inplace=True)
 df.rename(columns={'index': 'time'}, inplace=True)
+df_diff.reset_index(level=0, inplace=True)
+df_diff.rename(columns={'index': 'time'}, inplace=True)
+
 print("[>] write to database")
 df.to_sql('netherlands_cities', engine, if_exists='replace')
+df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace')
