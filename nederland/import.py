@@ -18,10 +18,12 @@ for file in files:
         del df['Indicator']
         df.fillna(0, inplace=True)
     elif d == date(year=2020,month=3,day=12):
-        df = pd.read_csv('RIVM/'+file, delimiter=';', skiprows=[0,2,3])
+        df = pd.read_csv('RIVM/'+file, delimiter=';', skiprows=[2,3], skip_blank_lines=True)
         del df['Gemnr']
+    elif d <= date(year=2020,month=3, day=16):
+        df = pd.read_csv("RIVM/"+file, delimiter=';', skiprows=[2,3], skip_blank_lines=True, index_col=False, usecols=['Gemeente', 'Aantal'])
     else:
-        df = pd.read_csv("RIVM/"+file, delimiter=';', skiprows=[0,2,3], index_col=False, usecols=['Gemeente', 'Aantal'])
+        df = pd.read_csv("RIVM/"+file, delimiter=';', skiprows=[2], skip_blank_lines=True, index_col=False, usecols=['Gemeente', 'Aantal'])
     df.set_index('Gemeente', inplace=True)
     df = df.T
     df.index = [d]
