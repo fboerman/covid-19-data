@@ -33,7 +33,9 @@ def parse_csv_sumpercountry(fname):
         'US': 'United States',
         'Congo (Kinshasa)' : 'Congo',
         'Taiwan*': 'Taiwan',
-        'Korea, South' : 'South Korea'
+        'Korea, South' : 'South Korea',
+        'The Bahamas': 'Bahamas',
+        'The Gambia' : 'Gambia'
     }, inplace=True)
     try:
 #         df.drop(['Others'], axis=1, inplace=True)
@@ -66,7 +68,7 @@ df=pd.concat([df_confirmed,df_deaths,df_recovered])
 df_diff=pd.concat([df_confirmed_diff,df_deaths_diff,df_recovered_diff])
 
 # function to retrieve continent with some handling of special cases since WHO does not fully follow ISO
-get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy'] else 'AS' if cname in ['Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory'] else 'AF' if cname in ['Cote d\'Ivoire'] else pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
+get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)'] else pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
 
 # create the time column needed for grafana
 df.reset_index(level=0, inplace=True)
