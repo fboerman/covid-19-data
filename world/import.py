@@ -34,9 +34,10 @@ def parse_csv_sumpercountry(fname):
         'Congo (Kinshasa)' : 'Congo',
         'Taiwan*': 'Taiwan',
         'Korea, South' : 'South Korea',
-        'The Bahamas': 'Bahamas',
-        'The Gambia' : 'Gambia'
+#        'The Bahamas': 'Bahamas',
+#        'The Gambia' : 'Gambia'
     }, inplace=True)
+    df.rename(columns=lambda x: x.replace(',','').replace("The", "").strip(), inplace=True)
     try:
 #         df.drop(['Others'], axis=1, inplace=True)
         df.drop(['Cruise Ship'], axis=1, inplace=True)
