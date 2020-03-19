@@ -77,6 +77,9 @@ df.rename(columns={'index': 'time'}, inplace=True)
 df_diff.reset_index(level=0, inplace=True)
 df_diff.rename(columns={'index': 'time'}, inplace=True)
 
+# read the stats from research from china
+df_china_stats=pd.read_csv('chinastats.csv', delimiter=';')
+
 # write everything to postgresql per continent
 print("[>] write to database")
 countries = list(df_confirmed.columns)
@@ -85,4 +88,6 @@ for continent in ['AF', 'AS', 'EU', 'NA', 'OC', 'SA']:
     countries_select = [c for c in countries if get_continent(c) == continent]
     df[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent, engine, if_exists='replace')
     df_diff[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent+'_diff', engine, if_exists='replace')
+
+df_china_stats.to_sql('china_stats', engine, if_exists='replace')
 

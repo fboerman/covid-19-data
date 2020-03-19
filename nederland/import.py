@@ -38,6 +38,10 @@ df.rename(columns={'index': 'time'}, inplace=True)
 df_diff.reset_index(level=0, inplace=True)
 df_diff.rename(columns={'index': 'time'}, inplace=True)
 
+df_extra = pd.read_csv('RIVM_extra.csv', delimiter=';')
+df_extra['time'] = pd.to_datetime(df_extra['time'], format="%d-%m-%y")
+
 print("[>] write to database")
 df.to_sql('netherlands_cities', engine, if_exists='replace')
 df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace')
+df_extra.to_sql('netherlands_extra', engine, if_exists='replace')
