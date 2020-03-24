@@ -17,7 +17,7 @@ if __name__ == '__main__':
             break
         d = input("Date (format %Y-%m-%d):")
         d = datetime.strptime(d, "%Y-%m-%d").date()
-        if d in df['time']:
+        if d in [time.date() for time in df['time']]:
             print("this date is already added")
             continue
         r = requests.get(url)

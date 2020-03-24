@@ -50,9 +50,11 @@ if __name__ == '__main__':
     data_per_date = {}
     df = pd.read_csv('saude.gov.br/brazil-timeseries-confirmed+deaths-perstate.csv', delimiter=';')
     df['time'] = pd.to_datetime(df['time'], format="%Y-%m-%d")
+    existing = [time.date() for time in df['time']]
+    df['time'] = existing
     for entry in [entry for entry in feed.entries if 'table' in entry['summary'] and 'corona' in entry['title'].lower()]:
         d = datetime.strptime(entry['published'], "%a, %d %b %Y %H:%M:%S %z").date()
-        if d in df['time']:
+        if d in existing:
             continue
     #     data_per_date[d.strftime("%d-%m-%Y")] = data
         data_per_date[d] = get_data_from_html(entry['summary'])
