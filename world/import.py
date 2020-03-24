@@ -4,9 +4,12 @@ import pandas as pd
 import pycountry_convert as pc
 from db import engine
 
-confirmed = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
-deaths = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+#confirmed = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+#deaths = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
 recovered = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
+
+confirmed = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+deaths = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'
 
 
 # parse the csv and sum all cases per country
@@ -59,17 +62,17 @@ df_deaths_diff = df_deaths.diff()
 df_deaths['type']='deaths'
 df_deaths_diff['type']='deaths'
 
-df_recovered = parse_csv_sumpercountry(recovered)
-df_recovered_diff = df_recovered.diff()
-df_recovered['type']='recovered'
-df_recovered_diff['type']='recovered'
+#df_recovered = parse_csv_sumpercountry(recovered)
+#df_recovered_diff = df_recovered.diff()
+#df_recovered['type']='recovered'
+#df_recovered_diff['type']='recovered'
 
 # create one big table
-df=pd.concat([df_confirmed,df_deaths,df_recovered])
-df_diff=pd.concat([df_confirmed_diff,df_deaths_diff,df_recovered_diff])
+df=pd.concat([df_confirmed,df_deaths])#,df_recovered])
+df_diff=pd.concat([df_confirmed_diff,df_deaths_diff])#,df_recovered_diff])
 
 # function to retrieve continent with some handling of special cases since WHO does not fully follow ISO
-get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)'] else pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
+get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)'] else 'OC' if cname in ['Timor-Leste'] else  pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
 
 # create the time column needed for grafana
 df.reset_index(level=0, inplace=True)
