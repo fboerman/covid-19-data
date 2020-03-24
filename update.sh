@@ -66,7 +66,7 @@ if [[ "0" != "${#diff_output}" ]]; then
 	if [[ $HOUR != 00 ]]; then
 		#./extract_current_ziekenhuis_number.py
 		cd /home/python/covid19bot/
-		env/bin/python manage.py send_updates --rivmupdate
+		env/bin/python manage.py send_updates --rivmupdate --top20update
 		cd /root/corona
 	fi
 else
