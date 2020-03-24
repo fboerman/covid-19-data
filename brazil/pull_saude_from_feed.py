@@ -24,6 +24,7 @@ def get_data_from_html(html):
             continue
         data.append([
             convert_code(cells[1].text.strip()),
+            # cells[1].text.strip(),
             int(cells[2].text.strip()),
             int(cells[3].text.strip()),
             #             region
@@ -48,9 +49,14 @@ if __name__ == '__main__':
     feed = feedparser.parse("https://www.saude.gov.br/noticias/agencia-saude?format=feed&type=rss")
 
     data_per_date = {}
-    df = pd.read_csv('saude.gov.br/brazil-timeseries-confirmed+deaths-perstate.csv', delimiter=';')
-    df['time'] = pd.to_datetime(df['time'], format="%Y-%m-%d")
-    existing = [time.date() for time in df['time']]
+    try:
+        df = pd.read_csv('saude.gov.br/brazil-timeseries-confirmed+deaths-perstate.csv', delimiter=';')
+        df['time'] = pd.to_datetime(df['time'], format="%Y-%m-%d")
+        existing = [time.date() for time in df['time']]
+    except:
+        df = pd.DataFrame()
+        existing = []
+
     df['time'] = existing
     for entry in [entry for entry in feed.entries if 'table' in entry['summary'] and 'corona' in entry['title'].lower()]:
         d = datetime.strptime(entry['published'], "%a, %d %b %Y %H:%M:%S %z").date()
