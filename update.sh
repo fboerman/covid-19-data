@@ -7,13 +7,13 @@ echo "[>] pulling RIVM data"
 #currentdate=$(echo $csvlinknl | grep -oE '[0-9]{8}')
 currentdate=$(date '+%d%m%Y')
 currentdatecsv="nederland/RIVM/${currentdate}.csv"
-braziltimestamp="brazil-last-modified.txt"
+braziltimestamp="brazil-page.html"
 
 if [[ ! -e $currentdatecsv ]]; then
 	touch $currentdatecsv
 fi
 if [[ ! -e $braziltimestamp ]]; then
-  touch
+  touch $braziltimestamp
 fi
 #wget --quiet $csvlinknl
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
@@ -35,13 +35,15 @@ git_output=$(git pull)
 cd ../../
 
 echo "[>] pulling brazil data"
-curl -sIL https://www.saude.gov.br/noticias/agencia-saude\?format\=feed\&type\=rss | grep "last-modified" >> /tmp/$braziltimestamp
-brazil_diff_output="$(diff /tmp/$braziltimestamp.csv $braziltimestamp)"
+#curl -sIL https://www.saude.gov.br/noticias/agencia-saude\?format\=feed\&type\=rss | grep "last-modified" >> /tmp/$braziltimestamp
+curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude/ > /tmp/$braziltimestamp
+
+brazil_diff_output="$(diff /tmp/$braziltimestamp $braziltimestamp)"
 if [[ "0" != "${#brazil_diff_output}" ]]; then
   cd brazil
   ./pull_saude_from_feed.py
-  mv /tmp/$braziltimestamp ./$braziltimestamp
   cd ..
+  mv /tmp/$braziltimestamp ./$braziltimestamp
 fi
 
 echo "[>] writing data to grafana database"
