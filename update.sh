@@ -62,7 +62,7 @@ if [[ "0" != "${#diff_output}" ]]; then
 	cd nederland
 	./import.py
 	cd ..
-	./push.sh
+	./push_nl.sh
 	if [[ $HOUR != 00 ]]; then
 		#./extract_current_ziekenhuis_number.py
 		cd /home/python/covid19bot/
@@ -78,6 +78,7 @@ if [[ "0" != "${#brazil_diff_output}" ]]; then
   cd brazil
   ./import.py
   cd ..
+  ./push_bra.sh
 else
   echo "[*>] no changes detected"
 fi
