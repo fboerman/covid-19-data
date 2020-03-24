@@ -1,2 +1,6 @@
 *db.py
 *.pyc
+.idea
+*.ipynb_checkpoints
+*.ipynb
+*.txt

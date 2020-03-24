@@ -7,9 +7,13 @@ echo "[>] pulling RIVM data"
 #currentdate=$(echo $csvlinknl | grep -oE '[0-9]{8}')
 currentdate=$(date '+%d%m%Y')
 currentdatecsv="nederland/RIVM/${currentdate}.csv"
+braziltimestamp="brazil-last-modified.txt"
 
 if [[ ! -e $currentdatecsv ]]; then
 	touch $currentdatecsv
+fi
+if [[ ! -e $braziltimestamp ]]; then
+  touch
 fi
 #wget --quiet $csvlinknl
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
@@ -30,6 +34,16 @@ cd world/COVID-19
 git_output=$(git pull)
 cd ../../
 
+echo "[>] pulling brazil data"
+curl -sIL https://www.saude.gov.br/noticias/agencia-saude\?format\=feed\&type\=rss | grep "last-modified" >> /tmp/$braziltimestamp
+brazil_diff_output="$(diff /tmp/$braziltimestamp.csv $braziltimestamp)"
+if [[ "0" != "${#brazil_diff_output}" ]]; then
+  cd brazil
+  ./pull_saude_from_feed.py
+  mv /tmp/$braziltimestamp ./$braziltimestamp
+  cd ..
+fi
+
 echo "[>] writing data to grafana database"
 echo "[*>] world"
 if [[ "$git_output" != "Already up to date." ]]; then
@@ -40,7 +54,7 @@ else
 	echo "[*>] no changes detected"
 fi
 
-echo "[*> netherlands"
+echo "[*>] netherlands"
 diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
 HOUR=$(date +%H)
 if [[ "0" != "${#diff_output}" ]]; then
@@ -57,4 +71,13 @@ if [[ "0" != "${#diff_output}" ]]; then
 	fi
 else
 	echo "[*>] no changes detected"
+fi
+
+echo "[*>] brazil"
+if [[ "0" != "${#brazil_diff_output}" ]]; then
+  cd brazil
+  ./import.py
+  cd ..
+else
+  echo "[*>] no changes detected"
 fi
