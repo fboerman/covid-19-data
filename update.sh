@@ -17,6 +17,7 @@ if [[ ! -e $braziltimestamp ]]; then
 fi
 #wget --quiet $csvlinknl
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
+rivmonline=$?
 
 #echo "[*>] fix names of csv"
 #cd nederland/RIVM
@@ -58,22 +59,26 @@ else
 fi
 
 echo "[*>] netherlands"
-diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
-HOUR=$(date +%H)
-if [[ "0" != "${#diff_output}" ]]; then
-	mv /tmp/$currentdate.csv $currentdatecsv
-	cd nederland
-	./import.py
-	cd ..
-	./push_nl.sh
-	if [[ $HOUR != 00 ]]; then
-		#./extract_current_ziekenhuis_number.py
-		cd /home/python/covid19bot/
-		env/bin/python manage.py send_updates --rivmupdate --top20update
-		cd /root/corona
-	fi
+if [[ $rivmonline != 0 ]]; then
+  echo "[!>] RIVM site not online"
 else
-	echo "[*>] no changes detected"
+  diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
+  HOUR=$(date +%H)
+  if [[ "0" != "${#diff_output}" ]]; then
+    mv /tmp/$currentdate.csv $currentdatecsv
+    cd nederland
+    ./import.py
+    cd ..
+    ./push_nl.sh
+    if [[ $HOUR != 00 ]]; then
+      #./extract_current_ziekenhuis_number.py
+      cd /home/python/covid19bot/
+      env/bin/python manage.py send_updates --rivmupdate --top20update
+      cd /root/corona
+    fi
+  else
+    echo "[*>] no changes detected"
+  fi
 fi
 
 echo "[*>] brazil"
