@@ -36,7 +36,8 @@ cd ../../
 
 echo "[>] pulling brazil data"
 #curl -sIL https://www.saude.gov.br/noticias/agencia-saude\?format\=feed\&type\=rss | grep "last-modified" >> /tmp/$braziltimestamp
-curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude/ > /tmp/$braziltimestamp
+#curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude/ > /tmp/$braziltimestamp
+curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude?format=feed\&type=rss > /tmp/$braziltimestamp
 
 brazil_diff_output="$(diff /tmp/$braziltimestamp $braziltimestamp)"
 if [[ "0" != "${#brazil_diff_output}" ]]; then
