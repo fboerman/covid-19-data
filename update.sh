@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
 
 echo "[>] pulling RIVM data"
-#csvlinknl=$(curl -s https://www.volksgezondheidenzorg.info/onderwerp/infectieziekten/regionaal-internationaal/coronavirus-covid-19 | tr '"' '\n' | grep '\.csv$')
-#csvlinknl="https://www.volksgezondheidenzorg.info${csvlinknl}"
-#cd nederland/RIVM
-#currentdate=$(echo $csvlinknl | grep -oE '[0-9]{8}')
 currentdate=$(date '+%d%m%Y')
-currentdatecsv="nederland/RIVM/${currentdate}.csv"
+currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
 braziltimestamp="brazil-page.html"
 
 if [[ ! -e $currentdatecsv ]]; then
@@ -19,16 +15,14 @@ fi
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
 rivmonline=$?
 
-#echo "[*>] fix names of csv"
-#cd nederland/RIVM
-#for file in ./*.csv; do
-#    [ -e "$file" ] || continue
-#    name=${file##*/}
-#    newname=$(echo $name | grep -oE '[0-9]{8}')
-#    newname="${newname}.csv"
-#    mv $name $newname 2> /dev/null
-#done
-#cd ../..
+if [[ $rivmonline == 0 ]]; then
+    curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep epidemiologische > /tmp/rivmreport.html
+    rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
+    if [[ "0" != "${#rivm_report_diff}" ]]; then
+        wget --quiet -O nederland/RIVM_reports/$(date +%d-%m-%Y).pdf  $(curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep -F ".pdf" | grep -oP 'https://www.rivm.nl.*?.pdf')
+        mv /tmp/rivmreport.html ./rivmreport.html
+    fi
+fi
 
 echo "[>] pulling johns hopkins data"
 cd world/COVID-19
@@ -36,8 +30,6 @@ git_output=$(git pull)
 cd ../../
 
 echo "[>] pulling brazil data"
-#curl -sIL https://www.saude.gov.br/noticias/agencia-saude\?format\=feed\&type\=rss | grep "last-modified" >> /tmp/$braziltimestamp
-#curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude/ > /tmp/$braziltimestamp
 curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude?format=feed\&type=rss > /tmp/$braziltimestamp
 
 brazil_diff_output="$(diff /tmp/$braziltimestamp $braziltimestamp)"
@@ -62,9 +54,9 @@ echo "[*>] netherlands"
 if [[ $rivmonline != 0 ]]; then
   echo "[!>] RIVM site not online"
 else
-  diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
-  HOUR=$(date +%H)
-  if [[ "0" != "${#diff_output}" ]]; then
+    diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
+    HOUR=$(date +%H)
+    if [[ "0" != "${#diff_output}" ]]; then
     mv /tmp/$currentdate.csv $currentdatecsv
     cd nederland
     ./import.py
@@ -76,9 +68,16 @@ else
       env/bin/python manage.py send_updates --rivmupdate --top20update
       cd /root/corona
     fi
-  else
-    echo "[*>] no changes detected"
-  fi
+    else
+    echo "[*>] no changes detected in csv"
+    fi
+    if [[ "0" != "${#rivm_report_diff}" ]]; then
+        cd nederland
+        ./import_reports.py
+        cd ..
+    else
+        echo "[*>] no changes detected in report"
+    fi
 fi
 
 echo "[*>] brazil"
