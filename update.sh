@@ -75,6 +75,7 @@ else
         cd nederland
         ./import_reports.py
         cd ..
+	./push_nl.sh
     else
         echo "[*>] no changes detected in report"
     fi

@@ -12,7 +12,21 @@ dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages='all', multiple_tables=
 df_age = dfs[0]
 df_sex = dfs[1]
 
-df_age.drop([0,22], inplace=True)
+for df in dfs:
+    try:
+        if df.iloc[1,0] == 'Man' and df.iloc[2,0]:
+            df_sex = df
+            continue
+    except:
+        pass
+
+
+    if df.columns[0] == 'Leeftijdsgroep':
+        df_age = df
+        continue
+
+
+df_age.drop([0,21], inplace=True)
 df_age.drop(["%", "%.1", "%.2"], axis=1, inplace=True)
 df_age.set_index("Leeftijdsgroep", inplace=True)
 df_age = df_age.astype('int')
@@ -23,6 +37,7 @@ df_age["Overleden_per"] = round(df_age["Overleden"]/df_age["Overleden"].sum() * 
 
 df_sex.drop(["%", "%.1", "%.2"], inplace=True, axis=1)
 df_sex.drop([0], inplace=True)
+df_sex.columns = ['Geslacht', 'Totaal', 'Ziekenhuisopname', 'Overleden']
 df_sex.set_index('Geslacht', inplace=True)
 
 df_age.to_sql('netherlands_rivm_current_age', engine, if_exists='replace')
