@@ -24,6 +24,12 @@ for df in dfs:
     if df.columns[0] == 'Leeftijdsgroep':
         df_age = df
         continue
+    try:
+        if df.columns[2] == 'Ziekenhuisopname' and len(df.columns) == 3:
+            df_hospital = df
+            continue
+    except:
+        pass
 
 
 df_age.drop([0,21], inplace=True)
@@ -40,5 +46,17 @@ df_sex.drop([0], inplace=True)
 df_sex.columns = ['Geslacht', 'Totaal', 'Ziekenhuisopname', 'Overleden']
 df_sex.set_index('Geslacht', inplace=True)
 
+df_hospital.drop([0], inplace=True)
+df_hospital['Totaal_add'] = df_hospital['Totaal'].cumsum()
+df_hospital['Ziekenhuisopname_add'] = df_hospital['Ziekenhuisopname'].cumsum()
+df_hospital['Ziekenhuisopname_percentage'] = round(df_hospital['Ziekenhuisopname_add']/df_hospital['Totaal_add']*100,2)
+c = list(df_hospital.columns)
+c[0] = 'time'
+df_hospital.columns = c
+df_hospital['time'] = pd.to_datetime(df_hospital['time'], format="%Y-%m-%d")
+
+
+
 df_age.to_sql('netherlands_rivm_current_age', engine, if_exists='replace')
 df_sex.to_sql('netherlands_rivm_current_sex', engine, if_exists='replace')
+df_hospital.to_sql('netherlands_rivm_hospitals', engine, if_exists='replace')
