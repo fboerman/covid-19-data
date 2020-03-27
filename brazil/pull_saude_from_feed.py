@@ -25,8 +25,8 @@ def get_data_from_html(html):
         data.append([
             convert_code(cells[1].text.strip()),
             # cells[1].text.strip(),
-            int(cells[2].text.strip()),
-            int(cells[3].text.strip()),
+            int(cells[2].text.strip().replace('.','')),
+            int(cells[3].text.strip().replace('.','')),
             #             region
         ])
     return data
