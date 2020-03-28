@@ -6,7 +6,8 @@ import pandas as pd
 import os
 
 print("[>] parsing latest RIVM report")
-reports = list(os.walk("RIVM_reports"))[0][2]
+reports = [x for x in list(os.walk("RIVM_reports"))[0][2] if x.split('.')[-1] == 'pdf']
+reports.sort()
 
 dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages='all', multiple_tables=True)
 df_age = dfs[0]

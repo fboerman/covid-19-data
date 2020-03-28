@@ -16,7 +16,7 @@ fi
 rivmonline=$?
 
 if [[ $rivmonline == 0 ]]; then
-    curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep epidemiologische > /tmp/rivmreport.html
+    curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep -F ".pdf" > /tmp/rivmreport.html
     rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
     if [[ "0" != "${#rivm_report_diff}" ]]; then
         wget --quiet -O nederland/RIVM_reports/$(date +%d-%m-%Y).pdf  $(curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep -F ".pdf" | grep -oP 'https://www.rivm.nl.*?.pdf')
