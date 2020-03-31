@@ -4,12 +4,17 @@ import tabula
 from db import engine
 import pandas as pd
 import os
+import PyPDF2
 
 print("[>] parsing latest RIVM report")
 reports = [x for x in list(os.walk("RIVM_reports"))[0][2] if x.split('.')[-1] == 'pdf']
 reports.sort()
+fileobj = open('RIVM_reports/'+reports[-1], 'rb')
+pdfreader = PyPDF2.PdfFileReader(fileobj)
+tables = [pagenum+1  for pagenum in range(pdfreader.numPages) if 'Tabel' in pdfreader.getPage(pagenum).extractText()]
+fileobj.close()
 
-dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages='all', multiple_tables=True)
+dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages=tables, multiple_tables=True)
 df_sex = None
 df_age = None
 df_hospital = None
@@ -36,11 +41,14 @@ for df in dfs:
 
 if df_age is not None:
     df_age.drop([0], inplace=True)
-    #df_age.drop([x for x in df_age.columns if '%' in x], axis=1, inplace=True)
-    df_age.columns = list(range(len(df_age.columns)))
-    df_age.drop([2,4], axis=1, inplace=True)
-    df_age.columns = ['Leeftijdsgroep', 'Totaal', 'Ziekenhuisopname', 'Overleden']
-    df_age['Overleden'] = df_age['Overleden'].apply(lambda x: x.split(' ')[0])
+    try:
+        df_age.drop([x for x in df_age.columns if '%' in x], axis=1, inplace=True)
+        df_age.columns = ['Leeftijdsgroep', 'Totaal', 'Ziekenhuisopname', 'Overleden']
+    except:
+        df_age.columns = list(range(len(df_age.columns)))
+        df_age.drop([2,4], axis=1, inplace=True)
+        df_age['Overleden'] = df_age['Overleden'].apply(lambda x: x.split(' ')[0])
+        
     df_age.set_index("Leeftijdsgroep", inplace=True)
     df_age = df_age.astype('int')
 
