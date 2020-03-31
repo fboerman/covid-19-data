@@ -23,7 +23,11 @@ for file in files:
     elif d <= date(year=2020,month=3, day=16):
         df = pd.read_csv("RIVM_timeseries/"+file, delimiter=';', skiprows=[2,3], skip_blank_lines=True, index_col=False, usecols=['Gemeente', 'Aantal'])
     else:
-        df = pd.read_csv("RIVM_timeseries/"+file, delimiter=';', skiprows=[2], skip_blank_lines=True, index_col=False, usecols=['Gemeente', 'Aantal'])
+        df = pd.read_csv("RIVM_timeseries/"+file, delimiter=';', skiprows=[2], skip_blank_lines=True, index_col=False, usecols=['Gemeente', 'BevAant', 'Aantal'])
+        if df['Aantal'].sum() > 17e6:
+            # column mix up, so swap the two
+            df['Aantal'] = df['BevAant']
+        df.drop('BevAant', axis=1, inplace=True)
     df.set_index('Gemeente', inplace=True)
     df = df.T
     df.index = [d]
@@ -35,8 +39,11 @@ df_diff = df.diff()
 
 df.reset_index(level=0, inplace=True)
 df.rename(columns={'index': 'time'}, inplace=True)
+# set the 31/3 row to all zero since RIVM switched to only hospital cases that day
+df_diff.loc[date(year=2020, month=3, day=31)] = len(df_diff.columns)*[0]
 df_diff.reset_index(level=0, inplace=True)
 df_diff.rename(columns={'index': 'time'}, inplace=True)
+
 
 print("[>] write to database")
 df.to_sql('netherlands_cities', engine, if_exists='replace')
