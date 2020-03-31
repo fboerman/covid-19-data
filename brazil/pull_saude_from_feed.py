@@ -12,21 +12,22 @@ def convert_code(code):
 def get_data_from_html(html):
     soup = BeautifulSoup(html, 'lxml')
     table = soup.find('table')
-    region = None
+    regions = set([x[2] for x in states])
+    # region = None
     data = []
     rows = table.find_all('tr')
     for i, row in enumerate(rows):
         if i in [0, 1] or i == len(rows) - 1:
             continue
         cells = row.find_all('td')
-        if len(cells) == 1:
-            region = cells[0].text.strip().split('-')[0].strip()
+        if cells[0].text.strip() in regions:
+            # region = cells[0].text.strip().split('-')[0].strip()
             continue
         data.append([
             convert_code(cells[1].text.strip()),
             # cells[1].text.strip(),
-            int(cells[2].text.strip().replace('.','')),
-            int(cells[3].text.strip().replace('.','')),
+            int(cells[2].text.strip().replace('.','').replace('-', '0')),
+            int(cells[3].text.strip().replace('.','').replace('-', '0')),
             #             region
         ])
     return data
