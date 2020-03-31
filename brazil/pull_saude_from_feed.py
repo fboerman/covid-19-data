@@ -64,6 +64,9 @@ if __name__ == '__main__':
         if d in existing:
             continue
     #     data_per_date[d.strftime("%d-%m-%Y")] = data
-        data_per_date[d] = get_data_from_html(entry['summary'])
+        try:
+            data_per_date[d] = get_data_from_html(entry['summary'])
+        except:
+            continue
     df = convert_data_to_df(data_per_date, df)
     df.to_csv('saude.gov.br/brazil-timeseries-confirmed+deaths-perstate.csv', sep=';', index=False)
