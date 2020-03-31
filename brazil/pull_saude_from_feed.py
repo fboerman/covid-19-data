@@ -42,7 +42,7 @@ def convert_data_to_df(data_per_date, df):
         df['type'] = ['confirmed', 'deaths']
         frames.append(df)
     df = pd.concat(frames)
-    df.sort_values('time', inplace=True)
+    df.sort_values(['time', 'type'], inplace=True)
     return df
 
 
