@@ -16,10 +16,10 @@ fi
 rivmonline=$?
 
 if [[ $rivmonline == 0 ]]; then
-    curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep -F ".pdf" > /tmp/rivmreport.html
+    curl -s https://www.rivm.nl/actuele-informatie-over-coronavirus/data | grep -F ".pdf" > /tmp/rivmreport.html
     rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
     if [[ "0" != "${#rivm_report_diff}" ]]; then
-        wget --quiet -O nederland/RIVM_reports/$(date +%d-%m-%Y).pdf  $(curl -s https://www.rivm.nl/nieuws/actuele-informatie-over-coronavirus/data | grep -F ".pdf" | grep -oP 'https://www.rivm.nl.*?.pdf')
+        wget --quiet -O nederland/RIVM_reports/$(date +%d-%m-%Y).pdf  $(curl -s https://www.rivm.nl/actuele-informatie-over-coronavirus/data | grep -F ".pdf" | grep -oP 'https://www.rivm.nl.*?.pdf')
         mv /tmp/rivmreport.html ./rivmreport.html
     fi
 fi
@@ -63,7 +63,6 @@ else
     cd ..
     ./push_nl.sh
     if [[ $HOUR != 00 ]]; then
-      #./extract_current_ziekenhuis_number.py
       cd /home/python/covid19bot/
       env/bin/python manage.py send_updates --rivmupdate --top20update
       cd /root/corona
