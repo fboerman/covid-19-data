@@ -68,9 +68,9 @@ else:
 
 if df_hospital is not None:
     df_hospital.drop([0], inplace=True)
-    df_hospital['Totaal_add'] = df_hospital['Totaal'].cumsum()
+    df_hospital['Aantal_add'] = df_hospital['Aantal'].cumsum()
     df_hospital['Ziekenhuisopname_add'] = df_hospital['Ziekenhuisopname'].cumsum()
-    df_hospital['Ziekenhuisopname_percentage'] = round(df_hospital['Ziekenhuisopname_add']/df_hospital['Totaal_add']*100,2)
+    df_hospital['Ziekenhuisopname_percentage'] = round(df_hospital['Ziekenhuisopname_add']/df_hospital['Aantal_add']*100,2)
     c = list(df_hospital.columns)
     c[0] = 'time'
     df_hospital.columns = c
