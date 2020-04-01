@@ -34,6 +34,7 @@ if [[ "0" != "${#stichting_nice_diff}" ]]; then
     cd nederland
     ./import_jsonsources.py
     cd ..
+    mv /tmp/stichtingnice.html ./
 else
     echo "[*>] no changes detected"
 fi
