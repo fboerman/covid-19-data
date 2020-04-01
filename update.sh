@@ -11,6 +11,9 @@ fi
 if [[ ! -e $braziltimestamp ]]; then
   touch $braziltimestamp
 fi
+if [[ ! -e stichtingnice.html ]]; then
+  touch stichtingnice.html
+fi
 #wget --quiet $csvlinknl
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
 rivmonline=$?
@@ -23,6 +26,18 @@ if [[ $rivmonline == 0 ]]; then
         mv /tmp/rivmreport.html ./rivmreport.html
     fi
 fi
+
+echo "[*>] import json sources"
+curl -s https://www.stichting-nice.nl/ | grep -A 1 -iF "laatste update" > /tmp/stichtingnice.html
+stichting_nice_diff="$(diff /tmp/stichtingnice.html stichtingnice.html)"
+if [[ "0" != "${#stichting_nice_diff}" ]]; then
+    cd nederland
+    ./import_jsonsources.py
+    cd ..
+else
+    echo "[*>] no changes detected"
+fi
+
 
 echo "[>] pulling johns hopkins data"
 cd world/COVID-19
