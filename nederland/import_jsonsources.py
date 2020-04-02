@@ -14,7 +14,8 @@ for table in config:
     for resource in table['data']:
         dfi = pd.read_json(requests.get(resource['url']).text)
         dfi = dfi.set_index(resource['index'])
-        dfi = dfi[resource['columns']]
+        if 'columns' in resource:
+            dfi = dfi[resource['columns']]
         if df is None:
             df = dfi
         else:
