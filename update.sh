@@ -76,6 +76,7 @@ else
     mv /tmp/$currentdate.csv $currentdatecsv
     cd nederland
     ./import.py
+    ./generate_geojson.py
     cd ..
     ./push_nl.sh
     if [[ $HOUR != 00 ]]; then
@@ -100,6 +101,7 @@ echo "[*>] brazil"
 if [[ "0" != "${#brazil_diff_output}" ]]; then
   cd brazil
   ./import.py
+  ./generate_geojson.py
   cd ..
   ./push_bra.sh
 else

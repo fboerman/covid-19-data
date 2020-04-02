@@ -7,6 +7,7 @@ from colour import Color
 from math import ceil
 from util import parse_all_csv
 import copy
+import os.path
 
 files = list(os.walk("RIVM_timeseries"))[0][2]
 files.sort()
@@ -19,6 +20,12 @@ df_BevAant = pd.read_csv('map_base/gemeente_2019_mensen.csv', delimiter=';')
 df_BevAant = df_BevAant.set_index('Gemeente')
 
 for name, df in csvs:
+    if os.path.exists('map_data/aantal/gemeenten_{}.geojson'.format(name)) and \
+        os.path.exists('map_data/aantal_norm/gemeenten_{}.geojson'.format(name)) and \
+        os.path.exists('map_data/aantal/gemeenten_colormap_{}.js'.format(name)) and \
+        os.path.exists('map_data/aantal_norm/gemeenten_colormap_{}.js'.format(name)):
+        continue
+
     df.index = df.index.str.strip()
     df_BevAant.index = df_BevAant.index.str.strip()
     df = pd.merge(df, df_BevAant, left_index=True, right_index=True)
@@ -50,7 +57,7 @@ for name, df in csvs:
     NUMBIN = 25
     for t in ['Aantal', 'aantal_norm']:
         BINSIZE = ceil(df[t].max()/NUMBIN)
-        white = Color("white")
+        white = Color("gray")
         colors = list(white.range_to(Color("darkred"), NUMBIN))
         colors = [c.hex for c in colors]
 
