@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import tabula
-from db import engine
+# from db import engine
 import pandas as pd
 import os
 import PyPDF2
+from datetime import date
+import re
 
 print("[>] parsing latest RIVM report")
 reports = [x for x in list(os.walk("RIVM_reports"))[0][2] if x.split('.')[-1] == 'pdf']
@@ -12,12 +14,12 @@ reports.sort()
 fileobj = open('RIVM_reports/'+reports[-1], 'rb')
 pdfreader = PyPDF2.PdfFileReader(fileobj)
 tables = [pagenum+1  for pagenum in range(pdfreader.numPages) if 'Tabel' in pdfreader.getPage(pagenum).extractText()]
-fileobj.close()
 
 dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages=tables, multiple_tables=True)
 df_sex = None
 df_age = None
 df_hospital = None
+df_deaths = None
 
 for df in dfs:
     try:
@@ -78,9 +80,50 @@ if df_hospital is not None:
 else:
     print("[!] could not find df_hospital")
 
+# this table somehow is not picked up by tabula so lets scrape it manually from the text, extracted by PyPDF2
+# asume below statement only produces one result
+pagenum = [pagenum  for pagenum in range(pdfreader.numPages) if 'Datumvanoverlijden' in pdfreader.getPage(pagenum).extractText() \
+           and 'Tabel' in pdfreader.getPage(pagenum).extractText()][0]
+pagestr = pdfreader.getPage(pagenum).extractText()
+# the line we are seeking has multiple "2020" and "-" in it
+dataline = None
+for line in pagestr.split('\n'):
+    if line.count("2020") > 1 and line.count("-") > 1:
+        dataline = line
+        break
+if dataline is not None:
+    datatable = []
+    dataline = dataline.replace("202020", "20|2020").replace("2020", "|2020").replace("||", "|")
+    rows = dataline.split("|")
+    for i, row in enumerate(rows):
+        if i == 0:
+            continue
+        num = row.split('-')[-1]
+        if i == len(rows) -1:
+            num = re.sub(r'[^0-9]', '' ,num)
+        try:
+            value = int(num[2:])
+        except ValueError:
+            value = 0
+        datatable.append([
+            date(year=int(row.split('-')[0]), month=int(row.split('-')[1]), day=int(num[:2])),
+            value
+        ])
+
+    df_deaths = pd.DataFrame(datatable, columns=['time', 'deaths'])
+    df_deaths['deaths_cum'] = df_deaths['deaths'].cumsum()
+
+else:
+    print("[!] could not find df_deaths")
+
+
+fileobj.close()
+
 if df_age is not None:
     df_age.to_sql('netherlands_rivm_current_age', engine, if_exists='replace')
 if df_sex is not None:
     df_sex.to_sql('netherlands_rivm_current_sex', engine, if_exists='replace')
 if df_hospital is not None:
     df_hospital.to_sql('netherlands_rivm_hospitals', engine, if_exists='replace')
+if df_deaths is not None:
+    df_deaths.to_sql('netherlands_rivm_deaths', engine, if_exists='replace')
