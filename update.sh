@@ -77,7 +77,7 @@ else
     cd nederland
     ./import.py
     ./generate_geojson.py
-    ./extract_current_csv_rivm.py
+    ./extract_reported_state_rivm.py
     cd ..
     ./push_nl.sh
     if [[ $HOUR != 00 ]]; then
