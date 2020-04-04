@@ -83,38 +83,54 @@ else:
 # this table somehow is not picked up by tabula so lets scrape it manually from the text, extracted by PyPDF2
 # asume below statement only produces one result
 pagenum = [pagenum  for pagenum in range(pdfreader.numPages) if 'Datumvanoverlijden' in pdfreader.getPage(pagenum).extractText() \
-           and 'Tabel' in pdfreader.getPage(pagenum).extractText()][0]
-pagestr = pdfreader.getPage(pagenum).extractText()
-# the line we are seeking has multiple "2020" and "-" in it
-dataline = None
-for line in pagestr.split('\n'):
-    if line.count("2020") > 1 and line.count("-") > 1:
-        dataline = line
-        break
-if dataline is not None:
+           and 'Tabel' in pdfreader.getPage(pagenum).extractText()]
+if len(pagenum) == 0:
+    print("[!] could not find df_deaths")
+else:
+    pagestr = pdfreader.getPage(pagenum[0]).extractText()
     datatable = []
-    dataline = dataline.replace("202020", "20|2020").replace("2020", "|2020").replace("||", "|")
-    rows = dataline.split("|")
-    for i, row in enumerate(rows):
-        if i == 0:
+    for line in pagestr.split('\n'):
+        if '2020-' not in line:
             continue
-        num = row.split('-')[-1]
-        if i == len(rows) -1:
-            num = re.sub(r'[^0-9]', '' ,num)
-        try:
-            value = int(num[2:])
-        except ValueError:
-            value = 0
+        parts = line.split('-')
         datatable.append([
-            date(year=int(row.split('-')[0]), month=int(row.split('-')[1]), day=int(num[:2])),
-            value
+            date(year=int(parts[0]), month=int(parts[1]), day=int(parts[2][:2])),
+            int(parts[2][2:])
         ])
-
     df_deaths = pd.DataFrame(datatable, columns=['time', 'deaths'])
     df_deaths['deaths_cum'] = df_deaths['deaths'].cumsum()
 
-else:
-    print("[!] could not find df_deaths")
+## deprecated method for before 04-04-2020
+# # the line we are seeking has multiple "2020" and "-" in it
+# dataline = None
+# for line in pagestr.split('\n'):
+#     if line.count("2020") > 1 and line.count("-") > 1:
+#         dataline = line
+#         break
+# if dataline is not None:
+#     datatable = []
+#     dataline = dataline.replace("202020", "20|2020").replace("2020", "|2020").replace("||", "|")
+#     rows = dataline.split("|")
+#     for i, row in enumerate(rows):
+#         if i == 0:
+#             continue
+#         num = row.split('-')[-1]
+#         if i == len(rows) -1:
+#             num = re.sub(r'[^0-9]', '' ,num)
+#         try:
+#             value = int(num[2:])
+#         except ValueError:
+#             value = 0
+#         datatable.append([
+#             date(year=int(row.split('-')[0]), month=int(row.split('-')[1]), day=int(num[:2])),
+#             value
+#         ])
+#
+#     df_deaths = pd.DataFrame(datatable, columns=['time', 'deaths'])
+#     df_deaths['deaths_cum'] = df_deaths['deaths'].cumsum()
+#
+# else:
+#     print("[!] could not find df_deaths")
 
 
 fileobj.close()
