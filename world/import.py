@@ -6,7 +6,7 @@ from db import engine
 
 #confirmed = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
 #deaths = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
-recovered = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
+# recovered = 'world/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 
 confirmed = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
 deaths = 'COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'
@@ -71,12 +71,33 @@ df_deaths_diff['type']='deaths'
 df=pd.concat([df_confirmed,df_deaths])#,df_recovered])
 df_diff=pd.concat([df_confirmed_diff,df_deaths_diff])#,df_recovered_diff])
 
+# convert the tables to per 100.000 if names are known
+def get_df_per_pop(t):
+    df_slice = df[df['type'] == t]
+    df_population = pd.read_csv('world_population_wiki.csv', delimiter=';')
+    df_population.set_index('country', inplace=True)
+    df_per_pop = pd.DataFrame(index=df_slice.index)
+    for country in df.columns:
+        try:
+            val = int(df_population.loc[country])
+        except KeyError:
+            continue
+        df_per_pop[country] = round(df_slice[country]/(val/100000),4)
+    return df_per_pop
+df_confirmed_per_pop = get_df_per_pop('confirmed')
+df_confirmed_per_pop['type'] = 'confirmed'
+df_deaths_per_pop = get_df_per_pop('deaths')
+df_deaths_per_pop['type'] = 'deaths'
+df_per_pop = pd.concat([df_confirmed_per_pop, df_deaths_per_pop])
+
 # function to retrieve continent with some handling of special cases since WHO does not fully follow ISO
 get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Burma', 'Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory', 'West Bank and Gaza'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)'] else 'OC' if cname in ['Timor-Leste'] else  pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
 
 # create the time column needed for grafana
 df.reset_index(level=0, inplace=True)
 df.rename(columns={'index': 'time'}, inplace=True)
+df_per_pop.reset_index(level=0, inplace=True)
+df_per_pop.rename(columns={'index': 'time'}, inplace=True)
 df_diff.reset_index(level=0, inplace=True)
 df_diff.rename(columns={'index': 'time'}, inplace=True)
 
@@ -95,9 +116,10 @@ for continent in ['AF', 'AS', 'EU', 'NA', 'OC', 'SA']:
             continue
         if get_continent(c) == continent:
             countries_select.append(c)
-#    countries_select = [c for c in countries if get_continent(c) == continent]
     df[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent, engine, if_exists='replace')
     df_diff[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent+'_diff', engine, if_exists='replace')
 
-df_china_stats.to_sql('china_stats', engine, if_exists='replace')
+df_per_pop.to_sql('world_timeseries_per_pop', engine, if_exists='replace')
+df_per_pop.to_csv('world_timeseries_per_pop.csv', sep=';', index=False)
 
+df_china_stats.to_sql('china_stats', engine, if_exists='replace')
