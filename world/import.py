@@ -82,6 +82,9 @@ def get_df_per_pop(t):
             val = int(df_population.loc[country])
         except KeyError:
             continue
+        # filter out the very small countries to prevent weird statistic outliers
+        if val < 1e6:
+            continue
         df_per_pop[country] = round(df_slice[country]/(val/100000),4)
     return df_per_pop
 df_confirmed_per_pop = get_df_per_pop('confirmed')
