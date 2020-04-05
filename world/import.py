@@ -116,10 +116,10 @@ for continent in ['AF', 'AS', 'EU', 'NA', 'OC', 'SA']:
             continue
         if get_continent(c) == continent:
             countries_select.append(c)
-    df[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent, engine, if_exists='replace')
-    df_diff[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent+'_diff', engine, if_exists='replace')
+    df[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent, engine, if_exists='replace', index=False)
+    df_diff[['time'] + list(countries_select) + ['type']].to_sql('world_timeseries_'+continent+'_diff', engine, if_exists='replace', index=False)
 
-df_per_pop.to_sql('world_timeseries_per_pop', engine, if_exists='replace')
+df_per_pop.to_sql('world_timeseries_per_pop', engine, if_exists='replace', index=False)
 df_per_pop.to_csv('world_timeseries_per_pop.csv', sep=';', index=False)
 
-df_china_stats.to_sql('china_stats', engine, if_exists='replace')
+df_china_stats.to_sql('china_stats', engine, if_exists='replace', index=False)

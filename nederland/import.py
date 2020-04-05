@@ -21,5 +21,5 @@ df_diff.reset_index(level=0, inplace=True)
 df_diff.rename(columns={'index': 'time'}, inplace=True)
 
 print("[>] write to database")
-df.to_sql('netherlands_cities', engine, if_exists='replace')
-df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace')
+df.to_sql('netherlands_cities', engine, if_exists='replace', index=False)
+df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace', index=False)

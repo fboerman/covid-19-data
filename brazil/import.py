@@ -19,5 +19,5 @@ df_diff_deaths['type'] = 'deaths'
 df_diff = pd.concat([df_diff_confirmed, df_diff_deaths])
 
 print("[>] write to database")
-df.to_sql('brazil_states', engine, if_exists='replace')
-df_diff.to_sql('brazil_states_diff', engine, if_exists='replace')
+df.to_sql('brazil_states', engine, if_exists='replace', index=False)
+df_diff.to_sql('brazil_states_diff', engine, if_exists='replace', index=False)
