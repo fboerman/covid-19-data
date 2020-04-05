@@ -6,7 +6,6 @@ import pandas as pd
 import os
 import PyPDF2
 from datetime import date
-import re
 
 print("[>] parsing latest RIVM report")
 reports = [x for x in list(os.walk("RIVM_reports"))[0][2] if x.split('.')[-1] == 'pdf']
@@ -69,8 +68,8 @@ else:
     print("[!] could not find df_sex")
 
 if df_hospital is not None:
-    df_hospital.drop([0], inplace=True)
-    df_hospital['Aantal_add'] = df_hospital['Aantal'].cumsum()
+    df_hospital.drop([0,1], inplace=True)
+    df_hospital['Aantal_add'] = df_hospital['Totaal'].cumsum()
     df_hospital['Ziekenhuisopname_add'] = df_hospital['Ziekenhuisopname'].cumsum()
     df_hospital['Ziekenhuisopname_percentage'] = round(df_hospital['Ziekenhuisopname_add']/df_hospital['Aantal_add']*100,2)
     c = list(df_hospital.columns)
@@ -90,7 +89,7 @@ else:
     pagestr = pdfreader.getPage(pagenum[0]).extractText()
     datatable = []
     for line in pagestr.split('\n'):
-        if '2020-' not in line:
+        if '2020-' not in line or 'T/m' in line:
             continue
         parts = line.split('-')
         datatable.append([
