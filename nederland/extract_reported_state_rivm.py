@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import sys
 import re
 import pandas as pd
+import unicodedata
 from db import engine
 
 try:
@@ -20,9 +21,17 @@ soup = BeautifulSoup(r.text, 'lxml')
 # cards = soup.find('div', {'class':['card-wrapper', 'top']})
 # numbers = [int(re.sub(r'[^0-9]', '', x.text)) for x in cards.find_all('span', class_='h3')]
 # numbers_diff = [int(x) for x in [re.sub(r'[^0-9]', '', x.text) for x in cards.find_all('p') if '+' in str(x)] if x != '']
+
 rows = soup.find('table').find_all('tr')
-numbers = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[1].find_all('td')]
-numbers_diff = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[2].find_all('td')]
+numbers = []
+numbers_diff = []
+for row in rows:
+    parts = unicodedata.normalize("NFKD", row.find('h4').text).split(' ')
+    numbers.append(int(re.sub(r'[^0-9]', '', parts[0])))
+    numbers_diff.append(int(re.sub(r'[^0-9]', '', parts[1])))
+
+# numbers = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[1].find_all('td')[1].split(' ')]
+# numbers_diff = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[2].find_all('td')]
 
 df = pd.DataFrame([
     numbers,
