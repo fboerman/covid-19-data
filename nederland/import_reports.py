@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 
+### WARNING
+#   PDF scraping is very flacky, I kept adjusting this script but it became to much of a hassle and sometimes
+#   plain didnt work. This script works until the report from 06-04-2020. See import_rivm_reported_data.py
+#   for a scraping method that pulls in the json from rivm graps page, not all data is supported so some pdf scraping is imported
+#   this will be phased out as soon as rivm publishes graphs of the other things as well
+
+###
+
 import tabula
 from db import engine
 import pandas as pd
@@ -13,6 +21,9 @@ reports.sort()
 fileobj = open('RIVM_reports/'+reports[-1], 'rb')
 pdfreader = PyPDF2.PdfFileReader(fileobj)
 tables = [pagenum+1  for pagenum in range(pdfreader.numPages) if 'Tabel' in pdfreader.getPage(pagenum).extractText()]
+
+if len(tables) == 0:
+    tables='all'
 
 dfs = tabula.read_pdf("RIVM_reports/"+reports[-1], pages=tables, multiple_tables=True)
 df_sex = None

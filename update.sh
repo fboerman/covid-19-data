@@ -18,14 +18,17 @@ fi
 ./extract_current_csv_rivm.py > /tmp/$currentdate.csv
 rivmonline=$?
 
+# download the pdf
 if [[ $rivmonline == 0 ]]; then
     curl -s https://www.rivm.nl/actuele-informatie-over-coronavirus/data | grep -F ".pdf" > /tmp/rivmreport.html
     rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
     if [[ "0" != "${#rivm_report_diff}" ]]; then
-	    ./download_report.sh
-    	    mv /tmp/rivmreport.html ./rivmreport.html
+	    ./downloadreport.sh
+      mv /tmp/rivmreport.html ./rivmreport.html
     fi
 fi
+# download the json from the graphs of rivm
+curl -s https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F "application/json" | sed 's/<.*>\(.*\)<\/.*>/\1/' > nederland/rivm_graphs.json
 
 echo "[*>] import json sources"
 curl -s https://www.stichting-nice.nl/ | grep -A 1 -iF "laatste update" > /tmp/stichtingnice.html
@@ -76,6 +79,7 @@ else
     mv /tmp/$currentdate.csv $currentdatecsv
     cd nederland
     ./import.py
+    ./import_rivm_reported_data.py
     ./generate_geojson.py
     ./extract_reported_state_rivm.py
     cd ..
@@ -88,14 +92,14 @@ else
     else
     echo "[*>] no changes detected in csv"
     fi
-    if [[ "0" != "${#rivm_report_diff}" ]]; then
-        cd nederland
-        ./import_reports.py
-        cd ..
-	./push_nl.sh
-    else
-        echo "[*>] no changes detected in report"
-    fi
+#    if [[ "0" != "${#rivm_report_diff}" ]]; then
+#        cd nederland
+#        ./import_reports.py
+#        cd ..
+#	./push_nl.sh
+#    else
+#        echo "[*>] no changes detected in report"
+#    fi
 fi
 
 echo "[*>] brazil"
