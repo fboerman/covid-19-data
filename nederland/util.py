@@ -37,7 +37,7 @@ def parse_all_csv(turn=True):
         else:
             df = pd.read_csv("RIVM_timeseries/" + file, delimiter=';', skiprows=[], skip_blank_lines=True,
                              index_col=False, usecols=['Gemeente', 'Zkh opname'])
-            df.rename(columns={'Zkh opname': 'Aantal'})
+            df.rename(columns={'Zkh opname': 'Aantal'}, inplace=True)
 
         df.set_index('Gemeente', inplace=True)
         if turn:
