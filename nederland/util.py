@@ -27,13 +27,17 @@ def parse_all_csv(turn=True):
                 # column mix up, so swap the two
                 df['Aantal'] = df['BevAant']
             df.drop('BevAant', axis=1, inplace=True)
-        else:
+        elif d <= date(year=2020, month=4, day=7):
             df = pd.read_csv("RIVM_timeseries/" + file, delimiter=';', skiprows=[], skip_blank_lines=True,
                              index_col=False, usecols=['Gemeente', 'BevAant', 'Aantal'])
             if df['Aantal'].sum() > 17e6:
                 # column mix up, so swap the two
                 df['Aantal'] = df['BevAant']
             df.drop('BevAant', axis=1, inplace=True)
+        else:
+            df = pd.read_csv("RIVM_timeseries/" + file, delimiter=';', skiprows=[], skip_blank_lines=True,
+                             index_col=False, usecols=['Gemeente', 'Zkh opname'])
+            df.rename(columns={'Zkh opname': 'Aantal'})
 
         df.set_index('Gemeente', inplace=True)
         if turn:
