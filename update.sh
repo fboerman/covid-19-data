@@ -18,7 +18,7 @@ rivmonline=$?
 
 if [[ $rivmonline == 0 ]]; then
     # download the pdf
-    curl -s https://www.rivm.nl/actuele-informatie-over-coronavirus/data | grep -F ".pdf" > /tmp/rivmreport.html
+    curl -s https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F ".pdf" > /tmp/rivmreport.html
     rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
     if [[ "0" != "${#rivm_report_diff}" ]]; then
 	    ./downloadreport.sh
