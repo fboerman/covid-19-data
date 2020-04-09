@@ -3,13 +3,10 @@
 echo "[>] pulling RIVM data"
 currentdate=$(date '+%d%m%Y')
 currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
-braziltimestamp="brazil-page.html"
+
 
 if [[ ! -e $currentdatecsv ]]; then
 	touch $currentdatecsv
-fi
-if [[ ! -e $braziltimestamp ]]; then
-  touch $braziltimestamp
 fi
 if [[ ! -e stichtingnice.html ]]; then
   touch stichtingnice.html
@@ -48,16 +45,6 @@ cd world/COVID-19
 git_output=$(git pull)
 cd ../../
 
-echo "[>] pulling brazil data"
-curl -s --compressed https://www.saude.gov.br/noticias/agencia-saude?format=feed\&type=rss > /tmp/$braziltimestamp
-
-brazil_diff_output="$(diff /tmp/$braziltimestamp $braziltimestamp)"
-if [[ "0" != "${#brazil_diff_output}" ]]; then
-  cd brazil
-  ./pull_saude_from_feed.py
-  cd ..
-  mv /tmp/$braziltimestamp ./$braziltimestamp
-fi
 
 echo "[>] writing data to grafana database"
 echo "[*>] world"
@@ -100,15 +87,4 @@ else
 #    else
 #        echo "[*>] no changes detected in report"
 #    fi
-fi
-
-echo "[*>] brazil"
-if [[ "0" != "${#brazil_diff_output}" ]]; then
-  cd brazil
-  ./import.py
-  ./generate_geojson.py
-  cd ..
-  ./push_bra.sh
-else
-  echo "[*>] no changes detected"
 fi

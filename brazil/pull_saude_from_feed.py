@@ -47,7 +47,7 @@ def convert_data_to_df(data_per_date, df):
 
 
 if __name__ == '__main__':
-    feed = feedparser.parse("https://www.saude.gov.br/noticias/agencia-saude?format=feed&type=rss")
+    feed = feedparser.parse("./agencia-saude.xml")
 
     data_per_date = {}
     try:
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         existing = []
 
     df['time'] = existing
-    for entry in [entry for entry in feed.entries if 'table' in entry['summary'] and 'corona' in entry['title'].lower()]:
+    for entry in [entry for entry in feed.entries if 'table' in entry['summary'] and 'casos confirmados' in entry['title'].lower()]:
         d = datetime.strptime(entry['published'], "%a, %d %b %Y %H:%M:%S %z").date()
         if d in existing:
             continue
