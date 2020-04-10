@@ -4,7 +4,8 @@
 *.ipynb_checkpoints
 *.ipynb
 *.txt
-*.html
+rivmreport.html
+stichtingnice.html
 *.xml
 nederland/rivm_graphs.json
 nederland/map_data
