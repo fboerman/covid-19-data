@@ -28,7 +28,7 @@ if [[ $rivmonline == 0 ]]; then
     curl -s https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F "application/json" | sed 's/<.*>\(.*\)<\/.*>/\1/' > /tmp/rivm_graphs.json
     rivm_graphs_diff="$(diff /tmp/rivm_graphs.json nederland/rivm_graphs.json)"
     if [[ "0" != "${#rivm_graphs_diff}" ]]; then
-      mv /tmp/rivm_graphs.json
+      mv /tmp/rivm_graphs.json nederland/rivm_graphs.json
     fi
 fi
 
@@ -87,7 +87,7 @@ else
     if [[ "0" != "${#rivm_graphs_diff}" ]]; then
         cd nederland
         echo "[*>] json data import"
-        ./import_riv_reported_data.py
+        ./import_rivm_reported_data.py
         cd ..
         ./push_nl.sh
     else
