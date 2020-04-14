@@ -18,14 +18,14 @@ rivmonline=$?
 
 if [[ $rivmonline == 0 ]]; then
     # download the pdf
-    curl -s https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F ".pdf" > /tmp/rivmreport.html
+    curl -sL https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F ".pdf" > /tmp/rivmreport.html
     rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
     if [[ "0" != "${#rivm_report_diff}" ]]; then
 	    ./downloadreport.sh
       mv /tmp/rivmreport.html ./rivmreport.html
     fi
     # download the json from the graphs of rivm
-    curl -s https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F "application/json" | sed 's/<.*>\(.*\)<\/.*>/\1/' > /tmp/rivm_graphs.json
+    curl -sL https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F "application/json" | sed 's/<.*>\(.*\)<\/.*>/\1/' > /tmp/rivm_graphs.json
     rivm_graphs_diff="$(diff /tmp/rivm_graphs.json nederland/rivm_graphs.json)"
     if [[ "0" != "${#rivm_graphs_diff}" ]]; then
       mv /tmp/rivm_graphs.json nederland/rivm_graphs.json
