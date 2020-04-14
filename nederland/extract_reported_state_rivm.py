@@ -5,8 +5,10 @@ from bs4 import BeautifulSoup
 import sys
 import re
 import pandas as pd
-import unicodedata
+# import unicodedata
 from db import engine
+
+extractnumber = lambda x: int(re.sub(r'[^0-9]', '', x))
 
 try:
     r = requests.get("https://www.rivm.nl/coronavirus-kaart-van-nederland", timeout=10)
@@ -26,9 +28,10 @@ rows = soup.find('table').find_all('tr')
 numbers = []
 numbers_diff = []
 for row in rows:
-    parts = unicodedata.normalize("NFKD", row.find('h4').text).split(' ')
-    numbers.append(int(re.sub(r'[^0-9]', '', parts[0])))
-    numbers_diff.append(int(re.sub(r'[^0-9]', '', parts[1])))
+    parts = row.find_all('td')[1:]
+    # parts = unicodedata.normalize("NFKD", row.find('h4').text).split(' ')
+    numbers.append(extractnumber(parts[0].text))
+    numbers_diff.append(extractnumber(parts[1].text))
 
 # numbers = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[1].find_all('td')[1].split(' ')]
 # numbers_diff = [int(re.sub(r'[^0-9]', '', x.text)) for x in rows[2].find_all('td')]
