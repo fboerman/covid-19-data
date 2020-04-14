@@ -15,6 +15,7 @@ with open('map_base/states.geojson', 'r') as stream:
     geojson_base = json.load(stream)
 
 for t in ['confirmed', 'deaths']:
+    print(t)
     df_states_static = pd.DataFrame(states, columns=['name', 'code', 'region', 'people'])
     df_states_static.set_index('name', inplace=True)
     df_states_timeseries = pd.read_csv('saude.gov.br/brazil-timeseries-confirmed+deaths-perstate.csv', delimiter=';')
@@ -27,11 +28,12 @@ for t in ['confirmed', 'deaths']:
     for column in df_states_timeseries_norm:
         df_states_timeseries_norm[column] /= df_states_static.loc[column, 'people']/100e3
 
+    print("[*] parsing csv and generate geojson")
     for date, data in df_states_timeseries_norm.iterrows():
+        print("[**] parsing {}".format(date))
         if os.path.exists('map_data/{}/states_{}.geojson'.format(t, date)) and \
             os.path.exists('map_data/{}/states_colormap_{}.js'.format(t, date)):
             continue
-
         geojson_aantal_norm = copy.deepcopy(geojson_base)
         data_abs = df_states_timeseries.loc[date, :]
 
