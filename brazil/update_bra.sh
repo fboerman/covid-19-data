@@ -16,11 +16,15 @@ wget --quiet -O /tmp/saudebr.csv $(curl -s $awslink$url -H "X-Parse-Application-
 # check for changes, if so run convert and import script
 diff="$(diff /tmp/saudebr.csv saude.gov.br/source.csv)"
 if [[ "0" != "${#diff}" ]]; then
-  echo "[>] new data, importing"
+  echo "[>] new data"
   mv /tmp/saudebr.csv saude.gov.br/source.csv
+  echo "[>] convert csv"
   ./convert.py
+  echo "[>] import csv"
   ./import.py
   ./push_bra.sh
+  echo "[>] generate geojson"
+  ./generate_geojson.py
 else
   echo "[>] no changes detected"
 fi
