@@ -94,7 +94,7 @@ df_deaths_per_pop['type'] = 'deaths'
 df_per_pop = pd.concat([df_confirmed_per_pop, df_deaths_per_pop])
 
 # function to retrieve continent with some handling of special cases since WHO does not fully follow ISO
-get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Burma', 'Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory', 'West Bank and Gaza'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)'] else 'OC' if cname in ['Timor-Leste'] else  pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
+get_continent = lambda cname: 'EU' if  cname in ['Reunion','Channel Islands', 'Holy See', 'Saint Barthelemy', 'Kosovo'] else 'AS' if cname in ['Burma', 'Hong Kong SAR', 'Macao SAR', 'occupied Palestinian territory', 'West Bank and Gaza'] else 'AF' if cname in ['Cote d\'Ivoire', 'Congo (Brazzaville)', 'Western Sahara'] else 'OC' if cname in ['Timor-Leste'] else  pc.country_alpha2_to_continent_code(pc.country_name_to_country_alpha2(cname))
 
 # create the time column needed for grafana
 df.reset_index(level=0, inplace=True)
