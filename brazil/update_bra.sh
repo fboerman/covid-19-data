@@ -25,6 +25,8 @@ if [[ "0" != "${#diff}" ]]; then
   ./push_bra.sh
   echo "[>] generate geojson"
   ./generate_geojson.py
+  echo "[>] push git"
+  ./push_bra.sh
 else
   echo "[>] no changes detected"
 fi

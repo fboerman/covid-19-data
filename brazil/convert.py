@@ -9,7 +9,7 @@ def convert_code(code):
 
 sourcedf = pd.read_csv("saude.gov.br/source.csv", delimiter=';')
 sourcedf.drop(['regiao', 'casosNovos', 'obitosNovos'], axis=1, inplace=True)
-sourcedf['data'] = pd.to_datetime(sourcedf['data'], format="%d/%m/%Y")
+sourcedf['data'] = pd.to_datetime(sourcedf['data'], format="%Y-%m-%d")
 sourcedf['data'] = sourcedf['data'].dt.date
 
 dfs = []

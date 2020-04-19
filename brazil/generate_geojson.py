@@ -31,9 +31,9 @@ for t in ['confirmed', 'deaths']:
     # print("[*] parsing csv and generate geojson")
     for date, data in df_states_timeseries_norm.iterrows():
         # print("[**] parsing {}".format(date))
-        date = datetime.strptime(date, '%Y-%m-%d').strftime("%d%m%Y")
-        if os.path.exists('map_data/{}/states_{}.geojson'.format(t, date)) and \
-            os.path.exists('map_data/{}/states_colormap_{}.js'.format(t, date)):
+        date2 = datetime.strptime(date, '%Y-%m-%d').strftime("%d%m%Y")
+        if os.path.exists('map_data/{}/states_{}.geojson'.format(t, date2)) and \
+            os.path.exists('map_data/{}/states_colormap_{}.js'.format(t, date2)):
             continue
         geojson_aantal_norm = copy.deepcopy(geojson_base)
         data_abs = df_states_timeseries.loc[date, :]
@@ -47,7 +47,7 @@ for t in ['confirmed', 'deaths']:
                 obj['properties']['value'] = 0
                 obj['properties']['absvalue'] = 0
 
-        with open('map_data/{}/states_{}.geojson'.format(t, date), 'w') as stream:
+        with open('map_data/{}/states_{}.geojson'.format(t, date2), 'w') as stream:
             json.dump(geojson_aantal_norm, stream, separators=(',', ':'))
 
         NUMBIN = 25
@@ -66,5 +66,5 @@ for t in ['confirmed', 'deaths']:
                 colormap += "\t\td > {} ? '{}' :\n".format(round((NUMBIN - i - 1) * BINSIZE, 4), c)
         colormap += "}"
 
-        with open('map_data/{}/states_colormap_{}.js'.format(t, date), 'w') as stream:
+        with open('map_data/{}/states_colormap_{}.js'.format(t, date2), 'w') as stream:
             stream.write(colormap)
