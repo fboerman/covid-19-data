@@ -13,7 +13,7 @@ df_hospital = None
 df_confirmedcases = None
 df_deaths = None
 
-maanden = ['jan', 'feb', 'mrt', 'apr', 'mei']
+maanden = ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
 maand_to_num = lambda x, maanden=maanden: maanden.index(x) + 1
 
 def to_df(data):
