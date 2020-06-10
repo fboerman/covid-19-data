@@ -77,9 +77,9 @@ else
     cd ..
     ./push_nl.sh
     if [[ $HOUR != 00 ]]; then
-      cd /home/python/covid19bot/
-      env/bin/python manage.py send_updates --rivmupdate --top20update
-      cd /root/corona
+#      cd /home/python/covid19bot/
+#      env/bin/python manage.py send_updates --rivmupdate --top20update
+#      cd /root/corona
     fi
     else
     echo "[*>] no changes detected in csv"

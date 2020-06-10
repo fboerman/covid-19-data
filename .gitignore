@@ -11,4 +11,5 @@ nederland/rivm_graphs.json
 nederland/map_data
 brazil/map_data
 env
-brazil/saude.gov.br/source.csv
+brazil/downloads
+brazil/*.xlsx
