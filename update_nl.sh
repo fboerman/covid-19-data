@@ -72,7 +72,7 @@ else
     cd nederland
     echo "[*>] csv data import"
     ./import.py
-    ./generate_geojson.py
+    #./generate_geojson.py
     ./extract_reported_state_rivm.py
     cd ..
     ./push_nl.sh

@@ -23,8 +23,8 @@ if [[ "0" != "${#diff}" ]]; then
   echo "[>] import csv"
   ./import.py
   ./push_bra.sh
-  echo "[>] generate geojson"
-  ./generate_geojson.py
+#  echo "[>] generate geojson"
+#  ./generate_geojson.py
   echo "[>] push git"
   ./push_bra.sh
 else
