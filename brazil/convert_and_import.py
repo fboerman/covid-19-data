@@ -29,4 +29,4 @@ df['cases_cum_norm'] = round(df['cases_cum']/df['population'], 4)
 df['deaths_cum_norm'] = round(df['deaths_cum']/df['population'], 4)
 df.drop('population', axis=1, inplace=True)
 
-
+df.to_sql('brazil_states', engine, if_exists='replace', index=False)
