@@ -76,11 +76,11 @@ else
     ./extract_reported_state_rivm.py
     cd ..
     ./push_nl.sh
-    if [[ $HOUR != 00 ]]; then
+#    if [[ $HOUR != 00 ]]; then
 #      cd /home/python/covid19bot/
 #      env/bin/python manage.py send_updates --rivmupdate --top20update
 #      cd /root/corona
-    fi
+#   fi
     else
     echo "[*>] no changes detected in csv"
     fi
