@@ -41,9 +41,11 @@ df = rename_and_order(df)
 df_all = rename_and_order(df_all)
 df_all.drop(['region', 'state', 'population'], axis=1, inplace=True)
 
-df['cases_cum_norm'] = round(df['cases_cum']/df['population'], 4)
-df['deaths_cum_norm'] = round(df['deaths_cum']/df['population'], 4)
+df['cases_cum_norm'] = round(df['cases_cum']/(df['population']/1e5), 4)
+df['deaths_cum_norm'] = round(df['deaths_cum']/(df['population']/1e5), 4)
 df.drop('population', axis=1, inplace=True)
+
+df.to_csv('brazil-states.csv', sep=';', index=False, date_format='%Y%m%d')
 
 if engine is not None:
     df.to_sql('brazil_states', engine, if_exists='replace', index=False)
