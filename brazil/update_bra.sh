@@ -5,9 +5,8 @@ awslink="https://xx9p7hp1p7.execute-api.us-east-1.amazonaws.com"
 url="/prod/PortalGeral"
 parseauth="unAFkcaNDeXajurGB7LChj8SgQYS2ptm"
 
-# extract the last updated at
-
-# if is changed then pull in new data
+echo "[>] Brazil"
+# extract the last updated at if is changed then pull in new data
 curl -s $awslink$url -H "X-Parse-Application-Id: $parseauth" | jq -r ".results | first | .updatedAt" > /tmp/timestamp.txt
 diff="$(diff /tmp/timestamp.txt timestamp.txt)"
 if [[ "0" != "${#diff}" ]]; then
