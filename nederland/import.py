@@ -3,23 +3,22 @@
 import pandas as pd
 import os
 from datetime import datetime,date
-from db import engine
-from util import parse_all_csv
+try:
+    from db import engine
+except:
+    engine = None
 
 print("[>] reading and parsing csv")
-fnames, dfs = parse_all_csv()
+df = pd.read_csv('RIVM_timeseries/latest.csv', skip_blank_lines=True, delimiter=';')
+df.drop(['Gemnr', 'Bev_2020', 'van_datum'], axis=1, inplace=True)
+df['tot_datum'] = pd.to_datetime(df['tot_datum'], format='%d-%m-%Y')
+df.rename(columns={'tot_datum': 'time'}, inplace=True)
+df.sort_values(['time', 'Gemeente'], inplace=True)
+df['Totaal_inc100000'] = df['Totaal_inc100000'].str.replace(',','.').astype(float)
+df['Zkh_inc100000'] = df['Zkh_inc100000'].str.replace(',','.').astype(float)
+df['Overleden_inc100000'] = df['Overleden_inc100000'].str.replace(',','.').astype(float)
 
-df = pd.concat(dfs).fillna(0).sort_index().astype('int')
-df = df.loc[:,df.sum(axis=0) != 0]
-df_diff = df.diff()
-
-df.reset_index(level=0, inplace=True)
-df.rename(columns={'index': 'time'}, inplace=True)
-# set the 31/3 row to all zero since RIVM switched to only hospital cases that day
-df_diff.loc[date(year=2020, month=3, day=31)] = len(df_diff.columns)*[0]
-df_diff.reset_index(level=0, inplace=True)
-df_diff.rename(columns={'index': 'time'}, inplace=True)
-
-print("[>] write to database")
-df.to_sql('netherlands_cities', engine, if_exists='replace', index=False)
-df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace', index=False)
+if engine is not None:
+    print("[>] write to database")
+    df.to_sql('netherlands_cities', engine, if_exists='replace', index=False)
+    #df_diff.to_sql('netherlands_cities_diff', engine, if_exists='replace', index=False)

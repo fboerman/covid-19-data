@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "[>] pulling RIVM data"
-currentdate=$(date '+%d%m%Y')
+currentdate=$(date '+%Y-%m-%d')
 currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
 
 
@@ -12,18 +12,18 @@ if [[ ! -e stichtingnice.html ]]; then
   touch stichtingnice.html
 fi
 #wget --quiet $csvlinknl
-./extract_current_csv_rivm.py > /tmp/$currentdate.csv
+./nederland/extract_current_csv_rivm.py > ./nederland/RIVM_timeseries/latest.csv
 rivmonline=$?
 
 
 if [[ $rivmonline == 0 ]]; then
-    # download the pdf
-    curl -sL https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F ".pdf" > /tmp/rivmreport.html
-    rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
-    if [[ "0" != "${#rivm_report_diff}" ]]; then
-	    ./downloadreport.sh
-      mv /tmp/rivmreport.html ./rivmreport.html
-    fi
+#    # download the pdf
+#    curl -sL https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F ".pdf" > /tmp/rivmreport.html
+#    rivm_report_diff="$(diff /tmp/rivmreport.html rivmreport.html)"
+#    if [[ "0" != "${#rivm_report_diff}" ]]; then
+#	    ./downloadreport.sh
+#      mv /tmp/rivmreport.html ./rivmreport.html
+#    fi
     # download the json from the graphs of rivm
     curl -sL https://www.rivm.nl/coronavirus-covid-19/grafieken | grep -F "application/json" | sed 's/<.*>\(.*\)<\/.*>/\1/' > /tmp/rivm_graphs.json
     rivm_graphs_diff="$(diff /tmp/rivm_graphs.json nederland/rivm_graphs.json)"
@@ -65,15 +65,16 @@ echo "[*>] netherlands (RIVM)"
 if [[ $rivmonline != 0 ]]; then
   echo "[!>] RIVM site not online"
 else
-    diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
-    HOUR=$(date +%H)
-    if [[ "0" != "${#diff_output}" ]]; then
-    mv /tmp/$currentdate.csv $currentdatecsv
+#    diff_output="$(diff /tmp/$currentdate.csv $currentdatecsv)"
+#    HOUR=$(date +%H)
+#    if [[ "0" != "${#diff_output}" ]]; then
+#    mv /tmp/$currentdate.csv $currentdatecsv
+
     cd nederland
     echo "[*>] csv data import"
+    ./split_csv.py
     ./import.py
-    #./generate_geojson.py
-    ./extract_reported_state_rivm.py
+    #./extract_reported_state_rivm.py
     cd ..
     ./push_nl.sh
 #    if [[ $HOUR != 00 ]]; then
@@ -81,9 +82,9 @@ else
 #      env/bin/python manage.py send_updates --rivmupdate --top20update
 #      cd /root/corona
 #   fi
-    else
-    echo "[*>] no changes detected in csv"
-    fi
+#    else
+#    echo "[*>] no changes detected in csv"
+#    fi
     if [[ "0" != "${#rivm_graphs_diff}" ]]; then
         cd nederland
         echo "[*>] json data import"

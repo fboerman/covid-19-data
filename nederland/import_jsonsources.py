@@ -3,7 +3,10 @@
 import pandas as pd
 import requests
 import json
-from db import engine
+try:
+    from db import engine
+except:
+    engine = None
 from functools import reduce
 
 with open('json-sources-config.json', 'r') as stream:
@@ -53,4 +56,5 @@ for table in config:
         df.to_csv(table["csv"], sep=';')
     df.reset_index(level=0, inplace=True)
     df.rename(columns={'index': 'time'}, inplace=True)
-    df.to_sql(table['tablename'], engine, if_exists='replace')
+    if engine is not None:
+        df.to_sql(table['tablename'], engine, if_exists='replace')
