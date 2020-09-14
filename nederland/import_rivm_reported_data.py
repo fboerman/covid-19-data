@@ -61,14 +61,14 @@ if df_age is not None:
     name = 'netherlands_rivm_current_age'
     if engine is not None:
         df_age.to_sql(name, engine, if_exists='replace')
-    df_age.to_csv('RIVM_reports/csv_latest/{}.csv'.format(name), sep=';', index=False)
+    df_age.to_csv('RIVM_timeseries/csv_latest/{}.csv'.format(name), sep=';', index=False)
 if df_deaths is not None:
     name = 'netherlands_rivm_deaths'
     if engine is not None:
         df_deaths.to_sql(name, engine, if_exists='replace')
-    df_deaths.to_csv('RIVM_reports/csv_latest/{}.csv'.format(name), sep=';', index=False)
+    df_deaths.to_csv('RIVM_timeseries/csv_latest/{}.csv'.format(name), sep=';', index=False)
 if df_hospital is not None:
     name = 'netherlands_rivm_hospitals'
     if engine is not None:
         df_hospital.to_sql(name, engine, if_exists='replace')
-    df_hospital.to_csv('RIVM_reports/csv_latest/{}.csv'.format(name), sep=';', index=False)
+    df_hospital.to_csv('RIVM_timeseries/csv_latest/{}.csv'.format(name), sep=';', index=False)
