@@ -2,12 +2,9 @@
 
 echo "[>] pulling RIVM data"
 currentdate=$(date '+%Y-%m-%d')
-currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
+#currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
 
 
-if [[ ! -e $currentdatecsv ]]; then
-	touch $currentdatecsv
-fi
 if [[ ! -e stichtingnice.html ]]; then
   touch stichtingnice.html
 fi
