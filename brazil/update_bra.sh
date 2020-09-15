@@ -16,6 +16,8 @@ if [[ "0" != "${#diff}" ]]; then
   cp covid.saude.gov.br.xlsx downloads/$(date --iso-8601=seconds).xlsx
   echo "[>] convert and import"
   ./convert_and_import.py
+  echo "[>] push extracted data"
+  ./push_bra.sh
 else
   echo "[>] no changes detected"
 fi
