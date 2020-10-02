@@ -24,6 +24,7 @@ if [[ $rivmonline == 0 ]]; then
     if [[ "0" != "${#rivm_graphs_diff}" ]]; then
       mv /tmp/rivm_graphs.json nederland/rivm_graphs.json
       rivmupdate=1
+      echo 'update json'
     fi
 
     # check the timestamp on the municipality datasheet
@@ -34,6 +35,7 @@ if [[ $rivmonline == 0 ]]; then
       curl -s https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv > nederland/RIVM_timeseries/gemeenten_latest.csv
       mv /tmp/gemeenten_timestamp.txt gemeenten_timestamp.txt
       rivmupdate=1
+      echo 'update csv'
     fi
 fi
 
@@ -67,7 +69,7 @@ else
 fi
 
 echo "[*>] netherlands (RIVM)"
-if [[ rivmupdate == 0 ]]; then
+if [[ $rivmupdate == 0 ]]; then
   echo "[!>] RIVM no updates"
 else
     cd nederland
