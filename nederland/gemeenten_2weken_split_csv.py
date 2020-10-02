@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from datetime import datetime
 
-stream = open('RIVM_timeseries/latest.csv', 'r')
+stream = open('RIVM_timeseries/gemeenten_2weken/latest.csv', 'r')
 
 csvs = []
 csv = None
@@ -29,5 +29,5 @@ stream.close()
 date_c = columns.split(';').index('tot_datum')
 for csv in csvs:
     d = csv[0].split(";")[date_c] # this assumes all lines are same date
-    with open(f'RIVM_timeseries/{datetime.strptime(d, "%d-%m-%Y").strftime("%Y-%m-%d")}.csv', 'w') as stream:
+    with open(f'RIVM_timeseries/gemeenten_2weken/{datetime.strptime(d, "%d-%m-%Y").strftime("%Y-%m-%d")}.csv', 'w') as stream:
         stream.writelines([x + '\n' for x in [columns]+csv])
