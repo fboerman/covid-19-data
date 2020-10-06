@@ -1,5 +1,5 @@
 Gemnr;Gemeente;Bev_2020;van_datum;tot_datum;Totaal_Absoluut;Totaal_inc100000;Zkh_Absoluut;Zkh_inc100000;Overleden_Absoluut;Overleden_inc100000
-518;'s-Gravenhage (gemeente);545838;6-5-2020;19-5-2020;153;28;12;2,2;28;5,1
+518;'s-Gravenhage (gemeente);545838;6-5-2020;19-5-2020;152;27,8;12;2,2;28;5,1
 796;'s-Hertogenbosch;155111;6-5-2020;19-5-2020;8;5,2;0;0;2;1,3
 1680;Aa en Hunze;25445;6-5-2020;19-5-2020;0;0;0;0;0;0
 358;Aalsmeer;31859;6-5-2020;19-5-2020;1;3,1;0;0;1;3,1
@@ -119,7 +119,7 @@ Gemnr;Gemeente;Bev_2020;van_datum;tot_datum;Totaal_Absoluut;Totaal_inc100000;Zkh
 392;Haarlem;162902;6-5-2020;19-5-2020;19;11,7;0;0;3;1,8
 394;Haarlemmermeer;156002;6-5-2020;19-5-2020;43;27,6;1;0,6;4;2,6
 1655;Halderberge;30284;6-5-2020;19-5-2020;2;6,6;0;0;0;0
-160;Hardenberg;60948;6-5-2020;19-5-2020;2;3,3;0;0;0;0
+160;Hardenberg;60948;6-5-2020;19-5-2020;2;3,3;0;0;1;1,6
 243;Harderwijk;48414;6-5-2020;19-5-2020;14;28,9;0;0;2;4,1
 523;Hardinxveld-Giessendam;18295;6-5-2020;19-5-2020;3;16,4;1;5,5;0;0
 72;Harlingen;15722;6-5-2020;19-5-2020;1;6,4;0;0;0;0
