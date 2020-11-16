@@ -2,6 +2,7 @@
 
 import pandas as pd
 from regions import states
+from datetime import datetime
 try:
     from db import engine
 except:
@@ -14,7 +15,7 @@ def convert_code(code):
 def rename_and_order(df):
     df = df[['regiao', 'estado', 'data', 'populacaoTCU2019', 'casosAcumulado', 'casosNovos', 'obitosAcumulado',
              'obitosNovos']].copy()
-    df['data'] = df['data'].dt.date
+    # df['data'] = df['data'].dt.date
     df.rename(columns={
         'regiao': 'region',
         'estado': 'state',
@@ -31,7 +32,8 @@ def rename_and_order(df):
     return df
 
 
-df = pd.read_excel('covid.saude.gov.br.xlsx')
+df = pd.read_csv('covid.saude.gov.br.csv', delimiter=';', parse_dates=['data'], date_parser=
+                 lambda x: datetime.strptime(x, "%Y-%m-%d"))
 df.fillna(0, inplace=True)
 df_all = df[df.apply(lambda x: x['regiao'] == 'Brasil', axis=1)]
 df = df[df.apply(lambda x: x['estado'] != 0 and x['municipio'] == 0 and x['populacaoTCU2019'] != 0, axis=1)]
@@ -45,7 +47,7 @@ df['cases_cum_norm'] = round(df['cases_cum']/(df['population']/1e5), 4)
 df['deaths_cum_norm'] = round(df['deaths_cum']/(df['population']/1e5), 4)
 df.drop('population', axis=1, inplace=True)
 
-df.to_csv('brazil-states.csv', sep=';', index=False, date_format='%Y%m%d')
+df.to_csv('brazil-states.csv', sep=';', index=False, date_format='%Y-%m-%d')
 
 if engine is not None:
     df.to_sql('brazil_states', engine, if_exists='replace', index=False)

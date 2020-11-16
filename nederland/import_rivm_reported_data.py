@@ -22,6 +22,10 @@ maand_to_num = lambda x, maanden=maanden: maanden.index(x) + 1
 
 def to_df(data):
     df = pd.DataFrame(data[1:], columns=['time', 'nieuw', 'gemeld'])
+    # replace field that's entirely space (or empty) with 0
+    df.replace(r'^\s*$', 0, regex=True, inplace=True)
+    # replace nan with 0
+    df.fillna(0, inplace=True)
     df = df.astype({'nieuw': 'int', 'gemeld': 'int'})
     df['time'] = df['time'].apply(
         lambda x: date(year=2020, month=maand_to_num(x.replace('-', ' ').split(' ')[1]),
@@ -46,7 +50,7 @@ for key, easychart in data['easychart'].items():
         df_hospital['Ziekenhuisopname'] = df_hospital['nieuw'] + df_hospital['gemeld']
         df_hospital['Ziekenhuisopname_add'] = df_hospital['Ziekenhuisopname'].cumsum()
         df_hospital.drop(['nieuw', 'gemeld'], axis=1, inplace=True)
-    elif config['title']['text'] == 'Bij de GGD gemelde patiënten vanaf 27 februari 2020':
+    elif config['title']['text'] == 'GGD Meldingen positief geteste personen per dag  vanaf 27 februari 2020':
         df_confirmedcases = to_df(data_csv)
         df_confirmedcases['Cases'] = df_confirmedcases['nieuw'] + df_confirmedcases['gemeld']
         df_confirmedcases['Cases_add'] = df_confirmedcases['Cases'].cumsum()
