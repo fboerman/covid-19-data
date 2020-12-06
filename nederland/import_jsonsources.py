@@ -57,4 +57,5 @@ for table in config:
     df.reset_index(level=0, inplace=True)
     df.rename(columns={'index': 'time'}, inplace=True)
     if engine is not None:
+        # TODO: only update changed values here (since its timeseries anyway)
         df.to_sql(table['tablename'], engine, if_exists='replace')

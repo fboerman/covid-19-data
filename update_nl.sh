@@ -40,16 +40,16 @@ if [[ $rivmonline == 0 ]]; then
 fi
 
 echo "[*>] import json sources (stichting NICE)"
-curl -s https://www.stichting-nice.nl/ | grep -A 1 -iF "laatste update" > /tmp/stichtingnice.html
-stichting_nice_diff="$(diff /tmp/stichtingnice.html stichtingnice.html)"
-if [[ "0" != "${#stichting_nice_diff}" ]]; then
-    cd nederland
-    ./import_jsonsources.py
-    cd ..
-    mv /tmp/stichtingnice.html ./
-else
-    echo "[*>] no changes detected"
-fi
+#curl -s https://www.stichting-nice.nl/ | grep -A 1 -iF "laatste update" > /tmp/stichtingnice.html
+#stichting_nice_diff="$(diff /tmp/stichtingnice.html stichtingnice.html)"
+#if [[ "0" != "${#stichting_nice_diff}" ]]; then
+cd nederland
+./import_jsonsources.py
+cd ..
+#    mv /tmp/stichtingnice.html ./
+#else
+#    echo "[*>] no changes detected"
+#fi
 
 
 echo "[>] pulling johns hopkins data"
