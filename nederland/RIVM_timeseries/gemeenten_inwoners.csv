@@ -1,17 +1,14 @@
 Gemeentecode;Gemeentenaam;Inwoneraantal
-3;Appingedam;11642
-10;Delfzijl;24679
-14;Groningen;232880
-24;Loppersum;9537
-34;Almere;211895
+14;Groningen;232874
+34;Almere;211893
 37;Stadskanaal;31686
 47;Veendam;27384
-50;Zeewolde;22654
+50;Zeewolde;22653
 59;Achtkarspelen;27843
 60;Ameland;3716
 72;Harlingen;15722
 74;Heerenveen;50493
-80;Leeuwarden;124089
+80;Leeuwarden;124084
 85;Ooststellingwerf;25469
 86;Opsterland;29733
 88;Schiermonnikoog;947
@@ -28,14 +25,14 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 147;Borne;23312
 148;Dalfsen;28587
 150;Deventer;100719
-153;Enschede;159642
+153;Enschede;159640
 158;Haaksbergen;24311
 160;Hardenberg;60948
 163;Hellendoorn;35916
-164;Hengelo (O);81140
+164;Hengelo (O.);81140
 166;Kampen;54319
 168;Losser;22683
-171;Noordoostpolder;47293
+171;Noordoostpolder;47291
 173;Oldenzaal;31836
 175;Ommen;18009
 177;Raalte;37712
@@ -43,31 +40,31 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 183;Tubbergen;21275
 184;Urk;21031
 189;Wierden;24446
-193;Zwolle;128843
+193;Zwolle;128840
 197;Aalten;27121
 200;Apeldoorn;163818
-202;Arnhem;161350
+202;Arnhem;161348
 203;Barneveld;59082
 209;Beuningen;25890
 213;Brummen;20726
 214;Buren;26749
 216;Culemborg;28955
 221;Doesburg;11077
-222;Doetinchem;58005
+222;Doetinchem;58001
 225;Druten;18926
 226;Duiven;25126
-228;Ede;117166
+228;Ede;117165
 230;Elburg;23161
-232;Epe;33179
+232;Epe;33178
 233;Ermelo;27008
-243;Harderwijk;48416
+243;Harderwijk;48414
 244;Hattem;12209
 246;Heerde;18589
 252;Heumen;16454
-262;Lochem;33730
+262;Lochem;33729
 263;Maasdriel;25030
 267;Nijkerk;43171
-268;Nijmegen;177662
+268;Nijmegen;177659
 269;Oldebroek;23646
 273;Putten;24112
 274;Renkum;31419
@@ -81,7 +78,7 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 294;Winterswijk;28854
 296;Wijchen;41110
 297;Zaltbommel;28881
-299;Zevenaar;43751
+299;Zevenaar;43750
 301;Zutphen;47934
 302;Nunspeet;27851
 303;Dronten;41555
@@ -97,34 +94,34 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 335;Montfoort;13917
 339;Renswoude;5444
 340;Rhenen;20119
-342;Soest;46607
-344;Utrecht;357600
+342;Soest;46606
+344;Utrecht;357597
 345;Veenendaal;66493
 351;Woudenberg;13362
 352;Wijk bij Duurstede;23914
 353;IJsselstein;34109
 355;Zeist;64905
-356;Nieuwegein;63463
+356;Nieuwegein;63462
 358;Aalsmeer;31859
 361;Alkmaar;109436
-362;Amstelveen;91676
-363;Amsterdam;872793
+362;Amstelveen;91675
+363;Amsterdam;872757
 370;Beemster;10022
-373;Bergen (N-H);29839
+373;Bergen (NH.);29839
 375;Beverwijk;41626
 376;Blaricum;11540
 377;Bloemendaal;23571
 383;Castricum;35986
-384;Diemen;30781
+384;Diemen;30780
 385;Edam-Volendam;36197
 388;Enkhuizen;18591
-392;Haarlem;162903
-394;Haarlemmermeer;156004
+392;Haarlem;162902
+394;Haarlemmermeer;156002
 396;Heemskerk;39182
 397;Heemstede;27234
 398;Heerhugowaard;57587
 399;Heiloo;23968
-400;Den Helder;56297
+400;Den Helder;56296
 402;Hilversum;90831
 405;Hoorn;73261
 406;Huizen;41273
@@ -143,40 +140,40 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 453;Velsen;68648
 457;Weesp;19738
 473;Zandvoort;17116
-479;Zaanstad;156799
+479;Zaanstad;156794
 482;Alblasserdam;20165
 484;Alphen aan den Rijn;111897
 489;Barendrecht;48714
-498;Drechterland;19720
+498;Drechterland;19719
 501;Brielle;17271
 502;Capelle aan den IJssel;67122
 503;Delft;103595
 505;Dordrecht;119284
 512;Gorinchem;37022
-513;Gouda;73428
-518;'s-Gravenhage;545844
+513;Gouda;73427
+518;'s-Gravenhage;545838
 523;Hardinxveld-Giessendam;18295
-530;Hellevoetsluis;40143
+530;Hellevoetsluis;40142
 531;Hendrik-Ido-Ambacht;31202
 532;Stede Broec;21726
 534;Hillegom;22209
-537;Katwijk;65754
-542;Krimpen aan den IJssel;29528
-546;Leiden;125101
+537;Katwijk;65753
+542;Krimpen aan den IJssel;29526
+546;Leiden;125099
 547;Leiderdorp;27056
 553;Lisse;22955
 556;Maassluis;33213
-569;Nieuwkoop;28812
+569;Nieuwkoop;28811
 575;Noordwijk;43508
-579;Oegstgeest;24841
+579;Oegstgeest;24840
 589;Oudewater;10230
-590;Papendrecht;32137
-597;Ridderkerk;46191
-599;Rotterdam;651164
-603;Rijswijk;54451
-606;Schiedam;78732
+590;Papendrecht;32136
+597;Ridderkerk;46189
+599;Rotterdam;651157
+603;Rijswijk;54450
+606;Schiedam;78730
 610;Sliedrecht;25220
-613;Albrandswaard;25591
+613;Albrandswaard;25590
 614;Westvoorne;14731
 622;Vlaardingen;73397
 626;Voorschoten;25596
@@ -189,11 +186,11 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 654;Borsele;22739
 664;Goes;38082
 668;West Maas en Waal;19324
-677;Hulst;27557
+677;Hulst;27556
 678;Kapelle;12695
-687;Middelburg;48823
+687;Middelburg;48822
 703;Reimerswaal;22730
-715;Terneuzen;54428
+715;Terneuzen;54426
 716;Tholen;25757
 717;Veere;21880
 718;Vlissingen;44360
@@ -205,41 +202,40 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 753;Best;29988
 755;Boekel;10785
 756;Boxmeer;29365
-757;Boxtel;30802
-758;Breda;184070
+757;Boxtel;32970
+758;Breda;184069
 762;Deurne;32471
 765;Pekela;12196
 766;Dongen;26222
-770;Eersel;19314
-772;Eindhoven;234400
+770;Eersel;19313
+772;Eindhoven;234394
 777;Etten-Leur;43878
-779;Geertruidenberg;21545
+779;Geertruidenberg;21544
 784;Gilze en Rijen;26431
-785;Goirle;23906
+785;Goirle;23904
 786;Grave;12436
-788;Haaren;14370
-794;Helmond;92424
-796;'s-Hertogenbosch;155112
+794;Helmond;92423
+796;'s-Hertogenbosch;155111
 797;Heusden;44692
 798;Hilvarenbeek;15518
 809;Loon op Zand;23408
 815;Mill en Sint Hubert;10939
-820;Nuenen c.a.;23383
+820;Nuenen, Gerwen en Nederwetten;23383
 823;Oirschot;18714
-824;Oisterwijk;26245
+824;Oisterwijk;32130
 826;Oosterhout;55982
 828;Oss;91915
-840;Rucphen;22879
+840;Rucphen;22878
 845;Sint-Michielsgestel;29208
 847;Someren;19368
 848;Son en Breugel;17322
 851;Steenbergen;24416
 852;Waterland;17424
-855;Tilburg;219797
+855;Tilburg;221243
 856;Uden;42119
 858;Valkenswaard;31193
 861;Veldhoven;45466
-865;Vught;26558
+865;Vught;31420
 866;Waalre;17456
 867;Waalwijk;48637
 873;Woensdrecht;21876
@@ -248,12 +244,12 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 882;Landgraaf;37445
 888;Beek;15865
 889;Beesel;13482
-893;Bergen (L);13085
+893;Bergen (L.);13085
 899;Brunssum;27821
 907;Gennep;16921
-917;Heerlen;87088
+917;Heerlen;87086
 928;Kerkrade;45749
-935;Maastricht;121579
+935;Maastricht;121575
 938;Meerssen;18828
 944;Mook en Middelaar;7847
 946;Nederweert;17019
@@ -266,11 +262,11 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 986;Voerendaal;12475
 988;Weert;50105
 994;Valkenburg aan de Geul;16367
-995;Lelystad;78600
+995;Lelystad;78598
 1507;Horst aan de Maas;42429
-1509;Oude IJsselstreek;39389
+1509;Oude IJsselstreek;39388
 1525;Teylingen;37440
-1581;Utrechtse Heuvelrug;49581
+1581;Utrechtse Heuvelrug;49580
 1586;Oost Gelre;29627
 1598;Koggenland;22749
 1621;Lansingerland;62384
@@ -305,7 +301,7 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 1721;Bernheze;31240
 1723;Alphen-Chaam;10203
 1724;Bergeijk;18635
-1728;Bladel;20394
+1728;Bladel;20390
 1729;Gulpen-Wittem;14171
 1730;Tynaarlo;33887
 1731;Midden-Drenthe;33185
@@ -313,34 +309,34 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 1735;Hof van Twente;35017
 1740;Neder-Betuwe;24339
 1742;Rijssen-Holten;38177
-1771;Geldrop-Mierlo;39727
+1771;Geldrop-Mierlo;39726
 1773;Olst-Wijhe;18252
-1774;Dinkelland;26462
+1774;Dinkelland;26461
 1783;Westland;110375
 1842;Midden-Delfland;19341
 1859;Berkelland;43747
 1876;Bronckhorst;36055
-1883;Sittard-Geleen;92430
+1883;Sittard-Geleen;92429
 1884;Kaag en Braassem;27297
 1891;Dantumadiel;18922
 1892;Zuidplas;43885
 1894;Peel en Maas;43425
 1895;Oldambt;38209
 1896;Zwartewaterland;22685
-1900;Súdwest Fryslân;89987
+1900;Súdwest-Fryslân;89987
 1901;Bodegraven-Reeuwijk;34872
 1903;Eijsden-Margraten;25768
-1904;Stichtse Vecht;64933
+1904;Stichtse Vecht;64931
 1911;Hollands Kroon;48432
 1916;Leidschendam-Voorburg;76534
 1924;Goeree-Overflakkee;50049
 1926;Pijnacker-Nootdorp;55308
-1930;Nissewaard;85220
+1930;Nissewaard;85219
 1931;Krimpenerwaard;56319
 1940;De Fryske Marren;51564
 1942;Gooise Meren;58055
 1945;Berg en Dal;34992
-1948;Meierijstad;81197
+1948;Meierijstad;81194
 1949;Waadhoeke;46090
 1950;Westerwolde;25733
 1952;Midden-Groningen;60797
@@ -349,8 +345,9 @@ Gemeentecode;Gemeentenaam;Inwoneraantal
 1959;Altena;55967
 1960;West Betuwe;51128
 1961;Vijfheerenlanden;56811
-1963;Hoeksche Waard;87402
-1966;Het Hogeland;47803
-1969;Westerkwartier;63330
+1963;Hoeksche Waard;87401
+1966;Het Hogeland;47801
+1969;Westerkwartier;63329
 1970;Noardeast-Fryslân;45228
 1978;Molenlanden;43909
+1979;Eemsdelta;45857
