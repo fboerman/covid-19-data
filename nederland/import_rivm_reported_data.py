@@ -28,8 +28,8 @@ def to_df(data):
     df.fillna(0, inplace=True)
     df = df.astype({'nieuw': 'int', 'gemeld': 'int'})
     df['time'] = df['time'].apply(
-        lambda x: date(year=2020, month=maand_to_num(x.replace('-', ' ').split(' ')[1]),
-                       day=int(x.replace('-', ' ').split(' ')[0])))
+        lambda x: date(year=int(x.split(' ')[2]), month=maand_to_num(x.split(' ')[1]),
+                       day=int(x.split(' ')[0])))
     return df
 
 
