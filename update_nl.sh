@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 echo "[>] pulling RIVM data"
 currentdate=$(date '+%Y-%m-%d')
 #currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
