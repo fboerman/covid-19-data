@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -e
-
 echo "[>] pulling RIVM data"
 currentdate=$(date '+%Y-%m-%d')
 #currentdatecsv="nederland/RIVM_timeseries/${currentdate}.csv"
@@ -15,7 +13,7 @@ if [[ ! -e gemeenten_timestamp.txt ]]; then
 fi
 
 #wget --quiet $csvlinknl
-./nederland/extract_current_csv_rivm.py > ./nederland/RIVM_timeseries/gemeenten_2weken/latest.csv
+./nederland/extract_current_csv_rivm.py > ./nederland/RIVM_timeseries/gemeenten_2weken/latest.csv || exit 1
 rivmonline=$?
 rivmupdate=0
 
@@ -30,11 +28,11 @@ if [[ $rivmonline == 0 ]]; then
     fi
 
     # check the timestamp on the municipality datasheet
-    curl -s -I https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv | grep -i 'last-modified' > /tmp/gemeenten_timestamp.txt
+    curl -s -I https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv | grep -i 'last-modified' > /tmp/gemeenten_timestamp.txt || exit 1
     rivm_gemeenten_diff="$(diff /tmp/gemeenten_timestamp.txt gemeenten_timestamp.txt)"
 
     if [[ "0" != "${#rivm_gemeenten_diff}" ]]; then
-      curl -s https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv > nederland/RIVM_timeseries/gemeenten_latest.csv
+      curl -s https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv > nederland/RIVM_timeseries/gemeenten_latest.csv || exit 1
       mv /tmp/gemeenten_timestamp.txt gemeenten_timestamp.txt
       rivmupdate=1
       echo 'update csv'
@@ -46,7 +44,7 @@ echo "[*>] import json sources (stichting NICE)"
 #stichting_nice_diff="$(diff /tmp/stichtingnice.html stichtingnice.html)"
 #if [[ "0" != "${#stichting_nice_diff}" ]]; then
 cd nederland
-./import_jsonsources.py
+./import_jsonsources.py || exit 1
 cd ..
 #    mv /tmp/stichtingnice.html ./
 #else
@@ -64,7 +62,7 @@ echo "[>] writing data to grafana database"
 echo "[*>] world"
 if [[ "$git_output" != "Already up to date." ]]; then
 	cd world
-	./import.py
+	./import.py || exit 1
 	cd ..
 else
 	echo "[*>] no changes detected"
@@ -76,15 +74,15 @@ if [[ $rivmupdate == 0 ]]; then
 else
     cd nederland
     echo "[*>] csv data import"
-    ./gemeenten_2weken_split_csv.py
-    ./import.py
+    ./gemeenten_2weken_split_csv.py || exit 1
+    ./import.py || exit 1
     #./extract_reported_state_rivm.py
     cd ..
     ./push_nl.sh
 
     cd nederland
     echo "[*>] json data import"
-    ./import_rivm_reported_data.py
+    ./import_rivm_reported_data.py || exit 1
     cd ..
     ./push_nl.sh
 fi

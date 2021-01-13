@@ -11,11 +11,11 @@ curl -s $awslink$url -H "X-Parse-Application-Id: $parseauth" | jq -r ".results |
 diff="$(diff /tmp/timestamp.txt timestamp.txt)"
 if [[ "0" != "${#diff}" ]]; then
   echo "[>] new data"
-  wget --quiet -O covid.saude.gov.br.csv $(curl -s $awslink$url -H "X-Parse-Application-Id: $parseauth" | jq -r ".results | first | .arquivo.url")
+  wget --quiet -O covid.saude.gov.br.csv $(curl -s $awslink$url -H "X-Parse-Application-Id: $parseauth" | jq -r ".results | first | .arquivo.url") || exit 1
   mv /tmp/timestamp.txt timestamp.txt
   cp covid.saude.gov.br.csv downloads/$(date --iso-8601=seconds).xlsx
   echo "[>] convert and import"
-  ./convert_and_import.py
+  ./convert_and_import.py || exit 1
   echo "[>] push extracted data"
   ./push_bra.sh
 else
