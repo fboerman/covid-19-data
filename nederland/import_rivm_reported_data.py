@@ -21,6 +21,17 @@ maand_to_num = lambda x, maanden=maanden: maanden.index(x) + 1
 
 
 def to_df(data):
+    def parse_d(x):
+        if '-' in x:
+            year = 2000 + int(x.split('-')[2])
+            month = maand_to_num(x.split('-')[1])
+            day = int(x.split('-')[0])
+        else:
+            year = int(x.split(' ')[2])
+            month = maand_to_num(x.split(' ')[1])
+            day = int(x.split(' ')[0])
+        return date(year=year, month=month, day=day)
+
     df = pd.DataFrame(data[1:], columns=['time', 'nieuw', 'gemeld'])
     # replace field that's entirely space (or empty) with 0
     df.replace(r'^\s*$', 0, regex=True, inplace=True)
@@ -28,8 +39,7 @@ def to_df(data):
     df.fillna(0, inplace=True)
     df = df.astype({'nieuw': 'int', 'gemeld': 'int'})
     df['time'] = df['time'].apply(
-        lambda x: date(year=int(x.split(' ')[2]), month=maand_to_num(x.split(' ')[1]),
-                       day=int(x.split(' ')[0])))
+        lambda x: parse_d)
     return df
 
 
