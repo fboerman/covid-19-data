@@ -38,8 +38,7 @@ def to_df(data):
     # replace nan with 0
     df.fillna(0, inplace=True)
     df = df.astype({'nieuw': 'int', 'gemeld': 'int'})
-    df['time'] = df['time'].apply(
-        lambda x: parse_d)
+    df['time'] = df['time'].apply(parse_d)
     return df
 
 
