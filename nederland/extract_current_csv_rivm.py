@@ -5,7 +5,7 @@ import requests
 import sys
 
 try:
-    r = requests.get("https://www.rivm.nl/coronavirus-covid-19/actueel", timeout=10)
+    r = requests.get("https://www.rivm.nl/coronavirus-covid-19/weekcijfers-covid-19", timeout=10)
 except:
     print("[!] Could not retrieve rivm site: unreachable")
     sys.exit(-1)
